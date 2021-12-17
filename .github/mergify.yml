@@ -1,0 +1,10 @@
+pull_request_rules:
+  - name: Automated dependabot merge
+    conditions:
+      - author~=^dependabot(|-preview)\[bot\]$
+      - status-success=integration-tests
+      - status-success=unit-tests
+      - status-success=lint
+    actions:
+      merge:
+        method: merge
