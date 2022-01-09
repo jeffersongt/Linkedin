@@ -20,7 +20,7 @@ export interface profileExperience {
 }
 
 export interface profileCompetences {
-    competence: string;
+    competence: Array<string>;
 }
 
 export interface company {
