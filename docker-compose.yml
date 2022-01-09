@@ -1,43 +1,55 @@
 version: '3'
 
 services:
-  app:
-    build: .
-    environment:
-      - PORT
-      - SESSION_SECRET
-      - MODE=dev
-      - DEFAULT_ADMIN_EMAIL
-      - DEFAULT_ADMIN_PASSWORD
-      - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
-      - REDIS_PORT
-      - REDIS_HOST=redis
-      - REDIS_PASS
-    ports:
-      - "${PORT}:${PORT}"
+  # app:
+  #   build: .
+  #   environment:
+  #     - PORT
+  #     - SESSION_SECRET
+  #     - MODE=dev
+  #     - DEFAULT_ADMIN_EMAIL
+  #     - DEFAULT_ADMIN_PASSWORD
+  #     - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
+  #     - REDIS_PORT
+  #     - REDIS_HOST=redis
+  #     - REDIS_PASS
+  #   ports:
+  #     - "${PORT}:${PORT}"
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     - ./logs:/app/logs
+
+  # studio:
+  #   build: .
+  #   command:
+  #     - db:studio
+  #   environment:
+  #     - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
+  #     - STUDIO_PORT
+  #   ports:
+  #     - "${STUDIO_PORT}:${STUDIO_PORT}"
+  #   networks:
+  #     - backend
+
+  # redis:
+  #   image: bitnami/redis:latest
+  #   environment:
+  #     - REDIS_PASSWORD=${REDIS_PASS}
+  #   networks:
+  #     - backend
+
+  client:
     networks:
-      - backend
+      - frontend
+    build:
+        context: ./client
+    command: npm start
     volumes:
-      - ./logs:/app/logs
-
-  studio:
-    build: .
-    command:
-      - db:studio
-    environment:
-      - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
-      - STUDIO_PORT
+      - ./client/:/usr/app
+      - /usr/app/node_modules
     ports:
-      - "${STUDIO_PORT}:${STUDIO_PORT}"
-    networks:
-      - backend
-
-  redis:
-    image: bitnami/redis:latest
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASS}
-    networks:
-      - backend
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
 
   db:
     image: postgres:alpine
@@ -49,9 +61,11 @@ services:
       - backend
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
 networks:
   backend:
+  frontend:
 
 volumes:
   db-data:
