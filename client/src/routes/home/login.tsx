@@ -43,7 +43,7 @@ function ShowLogin() {
                 password: actualPasswd
               }
             
-              axios.post(`http://localhost:8000/users/signin`, params)
+              axios.post(`http://localhost:8000/users/signin`, params, { withCredentials: true })
                 .then(res => {
                   console.log(res);
                   console.log(res.data);

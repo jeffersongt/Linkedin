@@ -1,36 +1,36 @@
 version: '3'
 
 services:
-  # app:
-  #   build: .
-  #   environment:
-  #     - PORT
-  #     - SESSION_SECRET
-  #     - MODE=dev
-  #     - DEFAULT_ADMIN_EMAIL
-  #     - DEFAULT_ADMIN_PASSWORD
-  #     - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
-  #     - REDIS_PORT
-  #     - REDIS_HOST=redis
-  #     - REDIS_PASS
-  #   ports:
-  #     - "${PORT}:${PORT}"
-  #   networks:
-  #     - backend
-  #   volumes:
-  #     - ./logs:/app/logs
+  app:
+    build: .
+    environment:
+      - PORT
+      - SESSION_SECRET
+      - MODE=dev
+      - DEFAULT_ADMIN_EMAIL
+      - DEFAULT_ADMIN_PASSWORD
+      - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
+      - REDIS_PORT
+      - REDIS_HOST=redis
+      - REDIS_PASS
+    ports:
+      - "${PORT}:${PORT}"
+    networks:
+      - backend
+    volumes:
+      - ./logs:/app/logs
 
-  # studio:
-  #   build: .
-  #   command:
-  #     - db:studio
-  #   environment:
-  #     - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
-  #     - STUDIO_PORT
-  #   ports:
-  #     - "${STUDIO_PORT}:${STUDIO_PORT}"
-  #   networks:
-  #     - backend
+  studio:
+    build: .
+    command:
+      - db:studio
+    environment:
+      - DB_URL=postgresql://$DB_USER:$DB_PASS@db:$DB_PORT/$DB_NAME
+      - STUDIO_PORT
+    ports:
+      - "${STUDIO_PORT}:${STUDIO_PORT}"
+    networks:
+      - backend
 
   redis:
     image: bitnami/redis:latest

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
 var id : string = "";
 
 function signup(email: string, password: string) {
@@ -24,7 +25,7 @@ function signup(email: string, password: string) {
 }
 
 function signout() {
-  axios.post(`http://localhost:8000/users/signout`, { withCredentials: true })
+  axios.post(`http://localhost:8000/users/signout`)
     .then(res => {
       console.log(res);
       console.log(res.data);
@@ -40,7 +41,7 @@ function signout() {
 }
 
 function deleteAccount() {
-  axios.post(`http://localhost:8000/users/:userId`, { withCredentials: true })
+  axios.post(`http://localhost:8000/users/me`, { withCredentials: true })
     .then(res => {
       console.log(res);
       console.log(res.data);

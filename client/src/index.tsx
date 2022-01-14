@@ -12,6 +12,13 @@ import {
 } from "react-router-dom";
 
 const rootElement = document.getElementById("root");
+var isAuth : boolean = false;
+var session_token = localStorage.getItem('token');
+
+if (session_token !== null) {
+  isAuth = true;
+}
+
 render(
   <BrowserRouter>
     <Routes>
