@@ -1,6 +1,5 @@
 import { Button, Modal, Form, Col, Row, InputGroup, FormControl, ToggleButton } from 'react-bootstrap';
 import { useState } from 'react';
-import { updateProfile, addExperience, deleteExperience, addCompetence, updateExperience, deleteCompetence } from "../exports";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -49,7 +48,7 @@ function UpdateInfos() {
 
             <Modal.Footer>
                 <Button variant="danger" onClick={handleClose}>Annuler</Button>
-                <Button variant="primary" onClick={updateProfile}>Enregistrer</Button>
+                <Button variant="primary" onClick={handleClose}>Enregistrer</Button>
             </Modal.Footer>
         </Modal>
         </>
@@ -124,7 +123,7 @@ function AddExperience() {
 
         <Modal.Footer>
             <Button variant="danger" onClick={handleClose}>Annuler</Button>
-            <Button variant="primary" onClick={addExperience}>Ajouter l'expérience</Button>
+            <Button variant="primary" onClick={handleClose}>Ajouter l'expérience</Button>
         </Modal.Footer>
     </Modal>
     </>
@@ -199,8 +198,8 @@ function UpdateExperiences() {
         </Modal.Body>
 
         <Modal.Footer>
-            <Button variant="danger" onClick={deleteExperience}>Supprimer l'expérience</Button>
-            <Button variant="primary" onClick={updateExperience}>Enregistrer</Button>
+            <Button variant="danger" onClick={handleClose}>Supprimer l'expérience</Button>
+            <Button variant="primary" onClick={handleClose}>Enregistrer</Button>
         </Modal.Footer>
     </Modal>
     </>
@@ -230,7 +229,7 @@ function UpdateCompetences() {
               aria-label="Ajouter une compétence"
               aria-describedby="basic-addon1"
             />
-            <Button variant="secondary" onClick={addCompetence}>
+            <Button variant="secondary" onClick={handleClose}>
               <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
             </Button>
           </InputGroup>
@@ -246,7 +245,7 @@ function UpdateCompetences() {
             />
             </Col>
             <Col sm={4}>
-              <Button variant="danger" style={{marginBottom: 5}} onClick={deleteCompetence}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+              <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
             </Col>
           </Row>
 
@@ -260,7 +259,7 @@ function UpdateCompetences() {
             />
             </Col>
             <Col sm={4}>
-              <Button variant="danger" style={{marginBottom: 5}} onClick={deleteCompetence}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+              <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
             </Col>
           </Row>
 
@@ -274,7 +273,7 @@ function UpdateCompetences() {
             />
             </Col>
             <Col sm={4}>
-              <Button variant="danger" style={{marginBottom: 5}} onClick={deleteCompetence}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+              <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
             </Col>
           </Row>
         </Form>

@@ -28,6 +28,7 @@
     "react-scripts": "^4.0.3",
     "react-simple-oauth2-login": "^0.5.3",
     "request": "^2.88.2",
+    "state-pool": "^0.6.0",
     "typescript": "^4.4.4",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^1.1.2"

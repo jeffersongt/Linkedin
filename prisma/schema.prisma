@@ -13,22 +13,55 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  username  String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  Post      Post[]
+  id         String       @id @default(cuid())
+  email      String       @unique
+  password   String
+  username   String?
+  role       Role         @default(USER)
+  createdAt  DateTime     @default(now())
+  profile    Profile[]
+  competence Competence[]
+  experience Experience[]
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  createdAt DateTime @default(now())
-  title     String
-  content   String   @db.Text
+model Profile {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  city       String
+  position   String
+  company_id String
+  company    Company  @relation(fields: [company_id], references: [id])
+  createdAt  DateTime @default(now())
+}
 
-  @@unique([authorId, title])
+model Competence {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Experience {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  company_id String
+  company    Company   @relation(fields: [company_id], references: [id])
+  position   String
+  started_at DateTime
+  ends_at    DateTime?
+  city       String
+  createdAt  DateTime  @default(now())
+}
+
+model Company {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  domain      String
+  adress      String
+  createdAt   DateTime     @default(now())
+  employees   Profile[]
+  experiences Experience[]
 }

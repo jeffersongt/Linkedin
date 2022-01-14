@@ -2,18 +2,23 @@ import '../../App.css';
 import { Container, Button,
    Image, Col, Row } from 'react-bootstrap';
 import NavbarLogged from '../../components/navbar_logged';
-import { UpdateInfos, UpdateExperiences, UpdateCompetences, AddExperience, logout, deleteAccount } from '../exports';
+import { UpdateInfos, UpdateExperiences, UpdateCompetences, AddExperience } from '../exports';
 import Divider from "@material-ui/core/Divider";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
+import { signout, deleteAccount } from '../exports';
 
 function Profile() {
-    return (
-      <div className="body__style">
-        <NavbarLogged/>
-        <Body/>
-      </div>
-    );
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const id = urlParams.get('id');
+  
+  return (
+    <div className="body__style">
+      <NavbarLogged/>
+      <Body/>
+    </div>
+  );
 }
 
 function Body() {
@@ -34,7 +39,7 @@ function Body() {
     {/* Logout button */}
     <Row>
       <Col md={12} className="centered__buttons">
-        <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={logout}>Déconnexion</Button>
+        <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={signout}>Déconnexion</Button>
       </Col>
     </Row>
 
@@ -49,6 +54,8 @@ function Body() {
 }
 
 function PersonalInfos() {
+  
+
   return (
     <>
     <Container className="profile__infos">

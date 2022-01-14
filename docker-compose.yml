@@ -32,12 +32,12 @@ services:
   #   networks:
   #     - backend
 
-  # redis:
-  #   image: bitnami/redis:latest
-  #   environment:
-  #     - REDIS_PASSWORD=${REDIS_PASS}
-  #   networks:
-  #     - backend
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASS}
+    networks:
+      - backend
 
   client:
     networks:

@@ -1,6 +1,7 @@
 export interface user {
     email : string;
     password: string;
+    userId: string;
 }
 
 export interface profileInfos {

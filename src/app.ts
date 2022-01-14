@@ -5,7 +5,7 @@ import cors from 'cors';
 /*  This import is only used for class-transformer side effects */
 import 'reflect-metadata';
 
-import router from './routes';
+import router from './components';
 import { config } from './appConfig';
 import session from './appSession';
 import requestLogger from './middlewares/requestLogger';
@@ -23,8 +23,9 @@ app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
+const allowedOrigins = ['http://localhost:3000'];
 app.use(cors({
-  origin: config.whitelist,
+  origin: allowedOrigins,
 }));
 app.use(meMiddleware);
 app.use(requestLogger);
