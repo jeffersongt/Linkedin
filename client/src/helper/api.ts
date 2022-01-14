@@ -30,6 +30,7 @@ function signout() {
       console.log(res);
       console.log(res.data);
       alert("Déconnexion réussie !");
+
     })
     .catch(function (error) {
       if (error.response) {
@@ -41,7 +42,7 @@ function signout() {
 }
 
 function deleteAccount() {
-  axios.post(`http://localhost:8000/users/me`, { withCredentials: true })
+  axios.delete(`http://localhost:8000/users/me`, { withCredentials: true })
     .then(res => {
       console.log(res);
       console.log(res.data);
