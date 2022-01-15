@@ -25,14 +25,15 @@ model User {
 }
 
 model Profile {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  city       String
-  position   String
-  company_id String
-  company    Company  @relation(fields: [company_id], references: [id])
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  fst_name  String
+  last_name String
+  city      String
+  position  String
+  company   String
+  createdAt DateTime @default(now())
 }
 
 model Competence {
@@ -47,8 +48,7 @@ model Experience {
   id         String    @id @default(cuid())
   user       User      @relation(fields: [userId], references: [id])
   userId     String
-  company_id String
-  company    Company   @relation(fields: [company_id], references: [id])
+  company    String
   position   String
   started_at DateTime
   ends_at    DateTime?
@@ -57,11 +57,9 @@ model Experience {
 }
 
 model Company {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  domain      String
-  adress      String
-  createdAt   DateTime     @default(now())
-  employees   Profile[]
-  experiences Experience[]
+  id        String   @id @default(cuid())
+  name      String   @unique
+  domain    String
+  adress    String
+  createdAt DateTime @default(now())
 }

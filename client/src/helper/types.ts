@@ -9,7 +9,7 @@ export interface profileInfos {
     last_name : string;
     position : string;
     city: string;
-    other: string;
+    company: string;
 }
 
 export interface profileExperience {

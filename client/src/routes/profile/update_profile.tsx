@@ -4,56 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
-
-function UpdateInfos() {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    return (
-        <>
-        <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
-
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Informations personnelles</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Prénom</Form.Label>
-                <Form.Control type="text" placeholder=" Entrer ici ..." />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPosition">
-                <Form.Label>Poste actuel</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." />
-              </Form.Group>
-
-              {/* Add autocompletion city with an api */}
-              <Form.Group className="mb-3" controlId="formBasicCity">
-                <Form.Label>Ville</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." />
-              </Form.Group>
-
-            </Form>
-            </Modal.Body>
-
-            <Modal.Footer>
-                <Button variant="danger" onClick={handleClose}>Annuler</Button>
-                <Button variant="primary" onClick={handleClose}>Enregistrer</Button>
-            </Modal.Footer>
-        </Modal>
-        </>
-    );
-}
+import axios from 'axios';
+import { profileInfos } from '../../helper/types';
 
 function AddExperience() {
   const [show, setShow] = useState(false);
@@ -113,17 +65,16 @@ function AddExperience() {
             </ToggleButton>
           </Form.Group>
 
-          {/* Add autocompletion location with an api */}
-          <Form.Group className="mb-3" controlId="formBasicLocation">
+          <Form.Group className="mb-3" controlId="fo rmBasicLocation">
             <Form.Label>Ville</Form.Label>
-            <Form.Control type="text" placeholder="Entrer ici ..." />
+            <Form.Control type="text" placeholder="Entrer ici ..."/>
           </Form.Group>
         </Form>
         </Modal.Body>
 
         <Modal.Footer>
             <Button variant="danger" onClick={handleClose}>Annuler</Button>
-            <Button variant="primary" onClick={handleClose}>Ajouter l'expérience</Button>
+            <Button variant="primary">Ajouter l'expérience</Button>
         </Modal.Footer>
     </Modal>
     </>
@@ -288,7 +239,6 @@ function UpdateCompetences() {
 }
 
 export {
-    UpdateInfos,
     UpdateExperiences,
     UpdateCompetences,
     AddExperience

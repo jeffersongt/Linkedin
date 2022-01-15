@@ -98,9 +98,6 @@ body {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: calc(55%) !important;
   border-radius: 10px;
   border-color: lightgrey;

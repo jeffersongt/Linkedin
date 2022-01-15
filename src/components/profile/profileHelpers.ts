@@ -15,5 +15,10 @@ export function buildProfileRo(profile: Profile): ProfileRo {
     id: profile.id,
     userId: profile.userId,
     createdAt: profile.createdAt,
+    fst_name: profile.fst_name,
+    last_name: profile.last_name,
+    city: profile.city,
+    position: profile.position,
+    company: profile.company,
   };
 }
