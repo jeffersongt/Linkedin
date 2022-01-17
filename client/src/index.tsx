@@ -2,7 +2,7 @@ import './index.css';
 import App from './App';
 import User from './routes/profile/profile';
 import Companies from './routes/companies/companies';
-import Search from './routes/search/search';
+import { Search } from './routes/search/search';
 import reportWebVitals from './reportWebVitals';
 import { render } from "react-dom";
 import {

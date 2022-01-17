@@ -64,7 +64,6 @@ router.post(
 
 router.get(
   '/users/:userId',
-  ownershipMiddleware,
   userMiddleware,
   handler(async (req, res) => {
     const user = await controllers.getUser(res.locals.user);

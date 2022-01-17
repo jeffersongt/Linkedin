@@ -22,6 +22,7 @@ model User {
   profile    Profile[]
   competence Competence[]
   experience Experience[]
+  employee   Employee[]
 }
 
 model Profile {
@@ -45,15 +46,13 @@ model Competence {
 }
 
 model Experience {
-  id         String    @id @default(cuid())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
-  company    String
-  position   String
-  started_at DateTime
-  ends_at    DateTime?
-  city       String
-  createdAt  DateTime  @default(now())
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  company   String
+  position  String
+  city      String
+  createdAt DateTime @default(now())
 }
 
 model Company {
@@ -61,5 +60,13 @@ model Company {
   name      String   @unique
   domain    String
   adress    String
+  createdAt DateTime @default(now())
+}
+
+model Employee {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  companyId String
   createdAt DateTime @default(now())
 }

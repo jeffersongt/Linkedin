@@ -15,5 +15,6 @@ export function buildExperienceRo(experience: Experience): ExperienceRo {
     id: experience.id,
     userId: experience.userId,
     createdAt: experience.createdAt,
+    position: experience.position,
   };
 }

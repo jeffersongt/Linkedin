@@ -3,20 +3,16 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useState } from 'react';
 import { user } from "../../helper/types";
-import { useNavigate } from 'react-router';
 import { signup } from "../exports";
 
 function ShowSignup() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const [actualEmail, setEmail] = useState("");
   const [actualPasswd, setPasswd] = useState("");
-
   let input_user : user = { email: "", password: "", userId: "" };
-  let navigate = useNavigate();
 
   return (
       <>
@@ -33,7 +29,6 @@ function ShowSignup() {
             <Form.Label>Email</Form.Label>
             <Form.Control type="text" placeholder="xxx.xxx@gmail.com" id="emailLOG" value={actualEmail} onChange={e => {input_user.email = e.target.value; setEmail(e.target.value)}} />
           </Form.Group>
-
           <OverlayTrigger
           placement="bottom"
           overlay={<Tooltip id="button-tooltip-2">Le mot de passe doit comporter minimum 8 caractères</Tooltip>} children={

@@ -15,5 +15,6 @@ export function buildCompetenceRo(competence: Competence): CompetenceRo {
     id: competence.id,
     userId: competence.userId,
     createdAt: competence.createdAt,
+    name: competence.name,
   };
 }

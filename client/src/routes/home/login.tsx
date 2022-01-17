@@ -1,22 +1,21 @@
 import '../../App.css';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
-import { user } from "../../helper/types";
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import { user } from "../../helper/types";
 
 function ShowLogin() {
-  const [show, setShow] = useState(false);
+  let navigate = useNavigate();
 
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const [actualEmail, setEmail] = useState("");
   const [actualPasswd, setPasswd] = useState("");
-
   let input_user : user = { email: "", password: "", userId: "" };
-  let navigate = useNavigate();
 
   return (
       <>
@@ -27,6 +26,7 @@ function ShowLogin() {
           <Modal.Title>Connexion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email</Form.Label>
@@ -42,15 +42,13 @@ function ShowLogin() {
                 email: actualEmail,
                 password: actualPasswd
               }
-            
               axios.post(`http://localhost:8000/users/signin`, params, { withCredentials: true })
                 .then(res => {
                   console.log(res);
-                  console.log(res.data);
                   alert("Connexion réussie ! Bienvenue " + res.data.email);
                   input_user.userId = res.data.id;
                   localStorage.setItem('id', res.data.id);
-                  navigate("/profil?id=" + input_user.userId);
+                  navigate("/profil");
                 })
                 .catch(function (error) {
                   if (error.response) {
@@ -66,6 +64,7 @@ function ShowLogin() {
               Se connecter
             </Button>
           </Form>
+          
         </Modal.Body>
         <Modal.Footer>
           <a style={{opacity: 0.8}}>Linkedin Entreprise</a>

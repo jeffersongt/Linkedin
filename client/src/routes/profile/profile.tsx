@@ -1,24 +1,18 @@
 import '../../App.css';
 import { Container, Button,
-   Image, Col, Row, Modal, Form } from 'react-bootstrap';
-import NavbarLogged from '../../components/navbar_logged';
-import { UpdateExperiences, UpdateCompetences, AddExperience } from '../exports';
-import Divider from "@material-ui/core/Divider";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
-import { signout, deleteAccount } from '../exports';
+   Image, Col, Row, Modal, Form, InputGroup, FormControl } from 'react-bootstrap';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { profileInfos } from '../../helper/types';
+import Divider from "@material-ui/core/Divider";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import NavbarLogged from '../../components/navbar_logged';
+import { signout, deleteAccount } from '../exports';
+import { profileInfos, profileExperience } from '../../helper/types';
 
-var action : boolean = true;
 var profileId : string = "";
-var first_name : string = "";
-var last_name : string = "";
-var city: string = "";
-var position: string = "";
-var company: string = "";
 
 function Profile() {
   const queryString = window.location.search;
@@ -37,15 +31,7 @@ function Body() {
   return (
     <>
     <PersonalInfos/>
-    
-    {/* Add experience */}
-    <Row>
-      <Col md={12} className="centered__buttons">
-        <AddExperience/>
-      </Col>
-    </Row>
-    
-    <ExperiencesList/>
+    <ProfileExperiences/>
     <CompetencesList/>
     
     <Row>
@@ -70,15 +56,19 @@ function PersonalInfos() {
   const [actualPosition, setPosition] = useState("");
   const [actualCompany, setCompany] = useState("");
 
+  const [tempFName, setTFName] = useState("");
+  const [tempLName, setTLName] = useState("");
+  const [tempCity, setTCity] = useState("");
+  const [tempPosition, setTPosition] = useState("");
+  const [tempCompany, setTCompany] = useState("");
+
+  const [change, setChange] = useState(false);
+  const handleChangeF = () => setChange(false);
+  const handleChangeT = () => setChange(true);
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const [tempFName, setTFName] = useState(actualFName);
-  const [tempLName, setTLName] = useState(actualLName);
-  const [tempCity, setTCity] = useState(actualCity);
-  const [tempPosition, setTPosition] = useState(actualPosition);
-  const [tempCompany, setTCompany] = useState(actualCompany);
 
   let form : profileInfos = {first_name : "", last_name : "", city: "", position: "", company: ""};
 
@@ -91,6 +81,11 @@ function PersonalInfos() {
       setCity(res.data[0].city);
       setPosition(res.data[0].position);
       setCompany(res.data[0].company);
+      setTFName(res.data[0].fst_name);
+      setTLName(res.data[0].last_name);
+      setTCity(res.data[0].city);
+      setTPosition(res.data[0].position);
+      setTCompany(res.data[0].company);
       profileId = res.data[0].id;
     })
     .catch(function (error) {
@@ -100,7 +95,7 @@ function PersonalInfos() {
         console.log(error.response.headers);
         alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
       }})
-  }, [action]);
+  }, [change]);
   
   return (
     <>
@@ -162,7 +157,14 @@ function PersonalInfos() {
                     .then(res => {
                       console.log(res);
                       console.log(res.data);
-                      alert("ok");
+                      alert("Votre profil a été mis à jour avec succès !");
+                      handleClose();
+                      if (change === false) {
+                        handleChangeT();
+                      }
+                      else {
+                        handleChangeF();
+                      }
                     })
                     .catch(function (error) {
                       if (error.response) {
@@ -197,92 +199,100 @@ function PersonalInfos() {
   );
 }
 
-function UpdateInfos() {
+function ProfileExperiences() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [actualFName, setFName] = useState("");
-  const [actualLName, setLName] = useState("");
-  const [actualCity, setCity] = useState("");
-  const [actualPosition, setPosition] = useState("");
-  const [actualCompany, setCompany] = useState("");
-  let form : profileInfos = {first_name : "", last_name : "", city: "", position: "", company: ""};
+  const [change, setChange] = useState(false);
+  const handleChangeF = () => setChange(false);
+  const handleChangeT = () => setChange(true);
 
-  return (
-      <>
-      <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+  const [showAdd, setShowAdd] = useState(false);
+  const handleCloseAdd = () => setShowAdd(false);
+  const handleShowAdd = () => setShowAdd(true);
 
-      <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-              <Modal.Title>Informations personnelles</Modal.Title>
-          </Modal.Header>
+  const [actualCityAdd, setCityAdd] = useState("");
+  const [actualPositionAdd, setPositionAdd] = useState("");
+  const [actualCompanyAdd, setCompanyAdd] = useState("");
+  let form : profileExperience = {position : "", company : "", start_date: new Date(), end_date: new Date(), location: ""};
 
-          <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Prénom</Form.Label>
-              <Form.Control type="text" placeholder=" Entrer ici ..." value={actualFName} onChange={e => { form.first_name = e.target.value; setFName(e.target.value)}} />
-            </Form.Group>
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8000/users/me/experiences`, { withCredentials: true })
+  //   .then(res => {
+  //     console.log(res);
+  //   })
+  //   .catch(function (error) {
+  //     if (error.response) {
+  //       console.log(error.response.data.error.message);
+  //       console.log(error.response.status);
+  //       console.log(error.response.headers);
+  //       alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+  //   }}
+  // ), [change]});
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Nom</Form.Label>
-              <Form.Control type="text" placeholder="Entrer ici ..."  value={actualLName} onChange={e => { form.last_name = e.target.value; setLName(e.target.value)}} />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPosition">
-              <Form.Label>Poste actuel</Form.Label>
-              <Form.Control type="text" placeholder="Entrer ici ..." value={actualPosition} onChange={e => { form.position = e.target.value; setPosition(e.target.value)}} />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicCity">
-              <Form.Label>Entreprise</Form.Label>
-              <Form.Control type="text" placeholder="Entrer ici ..." value={actualCompany} onChange={e => { form.company = e.target.value; setCompany(e.target.value)}} />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicCity">
-              <Form.Label>Ville</Form.Label>
-              <Form.Control type="text" placeholder="Entrer ici ..." value={actualCity} onChange={e => { form.city = e.target.value; setCity(e.target.value)}} />
-            </Form.Group>
-
-          </Form>
-          </Modal.Body>
-
-          <Modal.Footer>
-              <Button variant="danger" onClick={handleClose}>Annuler</Button>
-              <Button variant="primary" onClick={() => {
-                const params = {
-                  fst_name: actualFName,
-                  last_name: actualLName,
-                  city: actualCity,
-                  position: actualPosition,
-                  company: actualCompany,
-                }
-                const url : string = "http://localhost:8000/users/me/profiles/" + profileId;
-                axios.patch(url, params, { withCredentials: true })
-                .then(res => {
-                  console.log(res);
-                  console.log(res.data);
-                  alert("ok");
-                })
-                .catch(function (error) {
-                  if (error.response) {
-                    console.log(error.response.data.error.message);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                    alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
-                  }})
-              }}>Enregistrer</Button>
-          </Modal.Footer>
-      </Modal>
-      </>
-  );
-}
-
-function ExperiencesList() {
   return (
     <>
+    <Row>
+      <Col md={12} className="centered__buttons">
+        <Button variant="success" style={{marginTop: 10, marginBottom: 10}} onClick={handleShowAdd}>Ajouter une expérience</Button>
+        <Modal show={showAdd} onHide={handleCloseAdd}>
+            <Modal.Header closeButton>
+                <Modal.Title>Ajouter une expérience</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicPosition">
+                <Form.Label>Poste</Form.Label>
+                <Form.Control type="text" placeholder=" Entrer ici ..." value={actualPositionAdd} onChange={e => { form.position = e.target.value; setPositionAdd(e.target.value)}}/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="formBasicCompany">
+                <Form.Label>Entreprise</Form.Label>
+                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCompanyAdd} onChange={e => { form.company = e.target.value; setCompanyAdd(e.target.value)}}/>
+              </Form.Group>
+
+              <Form.Group className="mb-3" controlId="fo rmBasicLocation">
+                <Form.Label>Ville</Form.Label>
+                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCityAdd} onChange={e => { form.location = e.target.value; setCityAdd(e.target.value)}}/>
+              </Form.Group>
+            </Form>
+
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="danger" onClick={handleCloseAdd}>Annuler</Button>
+                <Button variant="primary" onClick={ () => {
+                  const params = {
+                    position: actualPositionAdd,
+                    company: actualCompanyAdd,
+                    city: actualCityAdd,
+                  };
+                  axios.post(`http://localhost:8000/users/me/experiences`, params, { withCredentials: true })
+                  .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                    alert("L'expérience " + res.data.position + " a été ajoutée avec succès !");
+                  })
+                  .catch(function (error) {
+                    if (error.response) {
+                      console.log(error.response.data.error.message);
+                      console.log(error.response.status);
+                      console.log(error.response.headers);
+                      alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+                  }})
+                  if (change === false) {
+                    handleChangeT();
+                  }
+                  else {
+                    handleChangeF();
+                  }
+                  handleCloseAdd();
+                }}>Ajouter l'expérience</Button>
+            </Modal.Footer>
+        </Modal>
+      </Col>
+    </Row>
     <Container className="profile__experiences">
       <Row>
         <Col md={4}>
@@ -290,7 +300,6 @@ function ExperiencesList() {
         </Col>
       </Row>
       <br/>
-
       {/* Fetch the experiences and generate the rows */}
       <Divider />
       <br/>
@@ -305,11 +314,56 @@ function ExperiencesList() {
           <a>Paris</a>
         </Col>
         <Col md={1} style={{alignItems: 'flex-end'}}>
-            <UpdateExperiences/>
+          <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+
+          <Modal show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                  <Modal.Title>Expérience X</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+              
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasicPosition">
+                  <Form.Label>Poste</Form.Label>
+                  <Form.Control type="text" placeholder=" Entrer ici ..." />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicCompany">
+                  <Form.Label>Entreprise</Form.Label>
+                  <Form.Control type="text" placeholder="Entrer ici ..." />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicLocation">
+                  <Form.Label>Ville</Form.Label>
+                  <Form.Control type="text" placeholder="Entrer ici ..." />
+                </Form.Group>
+              </Form>
+
+              </Modal.Body>
+              <Modal.Footer>
+                  <Button variant="danger"  onClick={ () => {
+                    if (change === false) {
+                      handleChangeT();
+                    }
+                    else {
+                      handleChangeF();
+                    }
+                    handleClose();
+                  }}>Supprimer l'expérience</Button>
+                  <Button variant="primary" onClick={ () => {
+                    if (change === false) {
+                      handleChangeT();
+                    }
+                    else {
+                      handleChangeF();
+                    }
+                    handleClose();
+                  }}>Enregistrer</Button>
+              </Modal.Footer>
+          </Modal>
         </Col>
       </Row>
       <br/>
-
       <Divider />
       <br/>
       <Row>
@@ -323,7 +377,6 @@ function ExperiencesList() {
           <a>Issy-les-moulineaux</a>
         </Col>
         <Col md={1} style={{alignItems: 'flex-end'}}>
-            <UpdateExperiences/>
         </Col>
       </Row>
       <br/>
@@ -333,6 +386,39 @@ function ExperiencesList() {
 }
 
 function CompetencesList() {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [change, setChange] = useState(false);
+  const handleChangeF = () => setChange(false);
+  const handleChangeT = () => setChange(true);
+
+  const [name, setCompetence] = useState("");
+  let competence : string = "";
+  const [arr, setArr] = useState<any>([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/users/me/competences`, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      // for(let i = 0; i < res.data.length; i++) {
+      //   // var name : string = res.data[i].name;
+      //   // var id : string = res.data[i].id;
+      //   // var domElement : any = <p key={id}>{name}</p>
+      //   // setArr([...domElement]);
+      // }
+      setArr(res.data[0].name);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }})
+  }, [change]);
+  
+
   return (
     <>
     <Container className="profile__competences">
@@ -341,27 +427,107 @@ function CompetencesList() {
           <h3 style={{fontWeight: 'normal', marginTop: 15}}>Compétences</h3>
         </Col>
         <Col md={1} style={{alignItems: 'flex-end', marginTop: 10}}>
-            <UpdateCompetences/>
+          <Button variant="danger" onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+
+          <Modal show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                  <Modal.Title>Compétences</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+
+              <Form>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Ajouter une compétence"
+                    aria-label="Ajouter une compétence"
+                    aria-describedby="basic-addon1" value={name} onChange={e => { competence = e.target.value; setCompetence(e.target.value)}}
+                  />
+                  <Button variant="secondary" onClick={() => {
+                    const params = {
+                      name: name
+                    }
+                    const url : string = "http://localhost:8000/users/me/competences";
+                    axios.post(url, params, { withCredentials: true })
+                      .then(res => {
+                        console.log(res);
+                        console.log(res.data);
+                        setCompetence("");
+                      })
+                      .catch(function (error) {
+                        if (error.response) {
+                          console.log(error.response.data.error.message);
+                          console.log(error.response.status);
+                          console.log(error.response.headers);
+                          alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+                        }})
+                  }}>
+                  <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
+                  </Button>
+                </InputGroup>
+                {/* Fetch list of competences and gen rows needed */}
+                <Row>
+                  <Col sm={8}>
+                  <input
+                    type="text"
+                    value="C"
+                    style={{textAlign: 'center', marginBottom: 5}}
+                    disabled
+                  />
+                  </Col>
+                  <Col sm={4}>
+                    <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={8}>
+                  <input
+                    type="text"
+                    value="React"
+                    style={{textAlign: 'center', marginBottom: 5}}
+                    disabled
+                  />
+                  </Col>
+                  <Col sm={4}>
+                    <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm={8}>
+                  <input
+                    type="text"
+                    value="Node"
+                    style={{textAlign: 'center', marginBottom: 5}}
+                    disabled
+                  />
+                  </Col>
+                  <Col sm={4}>
+                    <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+                  </Col>
+                </Row>
+              </Form>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={ () => {
+                  if (change === false) {
+                    handleChangeT();
+                  }
+                  else {
+                    handleChangeF();
+                  }
+                  handleClose();
+                }}>Fermer</Button>
+              </Modal.Footer>
+          </Modal>
         </Col>
       </Row>
       <br/>
       <Divider />
-
       <Row>
         <Col md={11}>
           <br/>
-          <a style={{fontWeight: 'bold', fontSize: 20}}><FontAwesomeIcon icon={faThumbtack} style={{color: 'black'}}/> Epinglées</a>
-          <br/>
-          <a>C</a>
-          <br/>
-          <a>English</a>
-          <br/>
-          <a>PHP</a>
-          <br/>
-          <br/>
-          <Divider />
-          <br/>
-          <a>Python</a>
+          {arr}
+          {/* <a>Python</a>
           <br/>
           <a>JS</a>
           <br/>
@@ -374,10 +540,9 @@ function CompetencesList() {
           <a>Bootstrap</a>
           <br/>
           <a>Unix</a>
-          <br/>
+          <br/> */}
           <br/>
         </Col>
-       
       </Row>
     </Container>
     </>

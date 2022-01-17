@@ -5,6 +5,7 @@ import profiles from './profile/profileRoutes';
 import competences from './competence/competenceRoutes';
 import experiences from './experience/experienceRoutes';
 import companies from './company/companyRoutes';
+import employees from './employee/employeeRoutes';
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use(experiences);
 router.use(competences);
 router.use(experiences);
 router.use(companies);
+router.use(employees);
 
 export default router;

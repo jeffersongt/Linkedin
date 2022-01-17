@@ -16,4 +16,5 @@ export interface CompetenceRo extends Ro {
   id: string;
   userId: string;
   createdAt: Date;
+  name: string;
 }

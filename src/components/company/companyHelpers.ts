@@ -14,5 +14,6 @@ export function buildCompanyRo(company: Company): CompanyRo {
   return {
     id: company.id,
     createdAt: company.createdAt,
+    name: company.name,
   };
 }

@@ -24,28 +24,6 @@ function signup(email: string, password: string) {
       }})
 }
 
-function createProfile() {
-  const params = {
-    fst_name: "",
-    last_name: "",
-    position: "",
-    city: "",
-    company_id: "",
-  }
-
-  axios.post(`http://localhost:8000/users/me/profiles`, params)
-    .then(res => {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch(function (error) {
-      if (error.response) {
-        console.log(error.response.data.error.message);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      }})
-}
-
 function signout() {
   axios.post(`http://localhost:8000/users/signout`)
     .then(res => {

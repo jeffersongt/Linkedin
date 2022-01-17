@@ -29,5 +29,4 @@ export interface company {
     domain: string;
     adress: string;
     nb_employees: number;
-    employees: Array<string>;
 }

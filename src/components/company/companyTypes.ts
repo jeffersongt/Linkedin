@@ -21,4 +21,5 @@ export class CompanyUpdateDto {
 export interface CompanyRo extends Ro {
   id: string;
   createdAt: Date;
+  name: string;
 }
