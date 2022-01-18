@@ -12,7 +12,7 @@
     "url": "https://github.com/LeChatErrant/API-template"
   },
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "license": "ISC",
   "scripts": {
@@ -62,6 +62,7 @@
     "http-errors": "^1.8.1",
     "http-status-codes": "^2.1.4",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.7.2",
     "prisma": "^3.6.0",
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
@@ -78,6 +79,7 @@
     "@types/jest": "^27.0.3",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.0",
+    "@types/nodemailer": "^6.4.4",
     "@types/redis": "^2.8.32",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
@@ -88,7 +90,7 @@
     "eslint-plugin-import": "^2.25.3",
     "husky": "^7.0.0",
     "jest": "^27.4.5",
-    "lint-staged": "^12.1.2",
+    "lint-staged": "^12.2.0",
     "supertest": "^6.1.6",
     "templated-project-cli": "^3.0.0",
     "ts-jest": "^27.1.2",
