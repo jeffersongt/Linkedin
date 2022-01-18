@@ -16,10 +16,20 @@ export class CompanyCreateDto {
 }
 
 export class CompanyUpdateDto {
+  @IsString()
+  name! : string;
+
+  @IsString()
+  domain!: string;
+
+  @IsString()
+  adress!: string;
 }
 
 export interface CompanyRo extends Ro {
   id: string;
   createdAt: Date;
   name: string;
+  domain: string;
+  adress: string;
 }

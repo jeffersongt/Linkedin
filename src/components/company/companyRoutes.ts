@@ -26,7 +26,7 @@ router.post(
   validate(CompanyCreateDto),
   ownershipMiddleware,
   handler(async (req, res) => {
-    const company = await controllers.createNewCompany(req.body);
+    const company = await controllers.createNewCompany(req.params.userId, req.body);
     res.status(httpStatus.CREATED).send(company);
   }),
 );

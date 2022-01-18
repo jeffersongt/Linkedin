@@ -14,10 +14,13 @@ export async function listCompanies(userId: string) {
   return companies.map((company) => buildCompanyRo(company));
 }
 
-export async function createNewCompany(payload: CompanyCreateDto) {
+export async function createNewCompany(userId : string, payload: CompanyCreateDto) {
   const company = await db.company.create({
     data: {
       ...payload,
+      user: {
+        connect: { id: userId },
+      },
     },
   });
   return buildCompanyRo(company);

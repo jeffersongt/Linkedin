@@ -24,7 +24,7 @@ router.get(
 router.post(
   '/users/:userId/profiles',
   validate(ProfileCreateDto),
-  ownershipMiddleware,
+  ownershipMiddleware, 
   handler(async (req, res) => {
     const profile = await controllers.createNewProfile(req.params.userId, req.body);
     res.status(httpStatus.CREATED).send(profile);

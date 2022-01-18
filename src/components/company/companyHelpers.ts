@@ -15,5 +15,7 @@ export function buildCompanyRo(company: Company): CompanyRo {
     id: company.id,
     createdAt: company.createdAt,
     name: company.name,
+    domain: company.domain,
+    adress: company.adress,
   };
 }

@@ -9,6 +9,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
+var name: string;
+var domain: string;
+var adress: string;
+
+var fst_name : string;
+var last_name : string;
+var position : string;
+var city : string;
+var company : string;
+
 function InputSearch() {
   let navigate = useNavigate();
 
@@ -21,13 +31,16 @@ function InputSearch() {
       overlay={<Tooltip id="button-tooltip-2">Recherchez une entreprise ou un utilisateur par son ID</Tooltip>} children={
     <InputGroup className="d-flex">
       <Button variant="outline-secondary" onClick={() => {
-        //navigate('/recherche')
         const url_company : string = "http://localhost:8000/users/me/companies/" + id;
-        const url_user : string = "http://localhost:8000/users/" + id;
+        const url_user : string = "http://localhost:8000/users/" + id + "/profiles";
         axios.get(url_company, { withCredentials: true })
           .then(res => {
             console.log(res);
+            name = res.data.name;
+            domain = res.data.domain;
+            adress = res.data.adresse;
             alert("L'entreprise " + res.data.name + " a été trouvée !");
+            navigate("/recherche/entreprise");
           })
           .catch(function (error) {
             if (error.response) {
@@ -37,7 +50,13 @@ function InputSearch() {
               axios.get(url_user, { withCredentials: true })
               .then(res => {
                 console.log(res);
-                alert("L'utilisateur " + res.data.email + " a été trouvé !");
+                fst_name = res.data[0].fst_name;
+                last_name = res.data[0].last_name;
+                position = res.data[0].position;
+                company = res.data[0].company;
+                city = res.data[0].city;
+                alert("L'utilisateur a été trouvé !");
+                navigate("/recherche/utilisateur");
               })
               .catch(function (error) {
                 if (error.response) {
@@ -60,7 +79,7 @@ function InputSearch() {
   );
 }
 
-function Search() {
+function SearchCompany() {
     return (
         <>
          <div style={{
@@ -100,13 +119,11 @@ function ResultsCompany() {
             <Divider/>
             <br/>
             <Row className="search__result">
-              <a style={{fontWeight: 'bold', fontSize: 23}}>Jestimo</a>
+              <a style={{fontWeight: 'bold', fontSize: 23}}>{name}</a>
               <br/>
-              <a style={{opacity: 0.7, fontSize: 20}}>Estimation immobilière</a>
+              <a style={{opacity: 0.7, fontSize: 20}}>{domain}</a>
               <br/>
-              <a>39 rue de courcelles, 75008 Paris</a>
-              <br/>
-              <a><a style={{fontWeight: 'bold'}}>15</a> employés</a>
+              <a>{adress}</a>
             </Row>
           </Col>
         </Row>
@@ -115,7 +132,63 @@ function ResultsCompany() {
   );
 }
 
+function SearchUser() {
+  return (
+      <>
+       <div style={{
+          backgroundImage: `url("https://images.pexels.com/photos/911738/pexels-photo-911738.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")`,backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          width: '100vw',
+          height: '100vh'
+        }}>
+          <NavbarLogged/>
+          <BodyUser/>
+      </div>
+      </>
+  );
+}
+
+function BodyUser() {
+  return (
+    <>
+    <ResultsUser/>
+    </>
+  );
+}
+
+function ResultsUser() {
+return (
+  <>
+  <Container className="search__infos">
+      <Row>
+        <Col md={11} className="search__infos__content">
+          <Row>
+            <Col md={12}>
+              <h4 style={{fontWeight: 'bold', marginTop: 15}}>Résultat de la recherche :</h4>
+            </Col>
+          </Row>
+          <br/>
+          <Divider/>
+          <br/>
+          <Row className="search__result">
+            <a style={{fontWeight: 'bold', fontSize: 23}}>{fst_name} {last_name}</a>
+            <br/>
+            <a style={{opacity: 0.7, fontSize: 20}}>{position}</a>
+            <br/>
+            <a>{company}</a>
+            <br/>
+            <a style={{fontWeight: 'bold'}}>{city}</a>
+            </Row>
+        </Col>
+      </Row>
+    </Container>
+  </>
+);
+}
+
 export {
-  Search,
+  SearchCompany,
+  SearchUser,
   InputSearch
 }

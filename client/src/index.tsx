@@ -2,7 +2,7 @@ import './index.css';
 import App from './App';
 import User from './routes/profile/profile';
 import Companies from './routes/companies/companies';
-import { Search } from './routes/search/search';
+import { SearchCompany, SearchUser } from './routes/search/search';
 import reportWebVitals from './reportWebVitals';
 import { render } from "react-dom";
 import {
@@ -25,7 +25,8 @@ render(
       <Route path="/" element={<App />} />
       <Route path="/profil" element={<User />} />
       <Route path="/entreprises" element={<Companies />} />
-      <Route path="/recherche" element={<Search />} />
+      <Route path="/recherche/entreprise" element={<SearchCompany />} />
+      <Route path="/recherche/utilisateur" element={<SearchUser />} />
     </Routes>
   </BrowserRouter>,
   rootElement

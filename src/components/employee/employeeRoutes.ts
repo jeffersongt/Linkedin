@@ -13,20 +13,20 @@ import { EmployeeCreateDto, EmployeeUpdateDto } from './employeeTypes';
 const router = express.Router();
 
 router.get(
-  '/users/:userId/employees',
+  '/users/:userId/companies/:companyId/employees',
   authMiddleware,
   handler(async (req, res) => {
-    const employees = await controllers.listEmployees(req.params.userId);
+    const employees = await controllers.listEmployees(req.params.userId, req.params.companyId);
     res.send(employees);
   }),
 );
 
 router.post(
-  '/users/:userId/employees',
+  '/users/:userId/companies/:companyId/employees',
   validate(EmployeeCreateDto),
   ownershipMiddleware,
   handler(async (req, res) => {
-    const employee = await controllers.createNewEmployee(req.params.userId, req.body);
+    const employee = await controllers.createNewEmployee(req.params.userId, req.params.companyId, req.body);
     res.status(httpStatus.CREATED).send(employee);
   }),
 );

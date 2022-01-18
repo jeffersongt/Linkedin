@@ -215,21 +215,39 @@ function ProfileExperiences() {
   const [actualCityAdd, setCityAdd] = useState("");
   const [actualPositionAdd, setPositionAdd] = useState("");
   const [actualCompanyAdd, setCompanyAdd] = useState("");
+  let formAdd : profileExperience = {position : "", company : "", start_date: new Date(), end_date: new Date(), location: ""};
+
+  const [actualCity, setCity] = useState("");
+  const [actualPosition, setPosition] = useState("");
+  const [actualCompany, setCompany] = useState("");
   let form : profileExperience = {position : "", company : "", start_date: new Date(), end_date: new Date(), location: ""};
 
-  // useEffect(() => {
-  //   axios.get(`http://localhost:8000/users/me/experiences`, { withCredentials: true })
-  //   .then(res => {
-  //     console.log(res);
-  //   })
-  //   .catch(function (error) {
-  //     if (error.response) {
-  //       console.log(error.response.data.error.message);
-  //       console.log(error.response.status);
-  //       console.log(error.response.headers);
-  //       alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
-  //   }}
-  // ), [change]});
+  const [City, setACity] = useState("");
+  const [Position, setAPosition] = useState("");
+  const [Company, setACompany] = useState("");
+  const [Id, setAId] = useState("");
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/users/me/experiences`, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      for(let i = 0; i < res.data.length; i++) {
+        setACompany(res.data[i].company);
+        setAPosition(res.data[i].position);
+        setACity(res.data[i].city);
+        setAId(res.data[i].id);
+        setCompany(res.data[i].company);
+        setPosition(res.data[i].position);
+        setCity(res.data[i].city);
+      }
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }})
+  }, [change]);
 
   return (
     <>
@@ -245,17 +263,17 @@ function ProfileExperiences() {
             <Form>
               <Form.Group className="mb-3" controlId="formBasicPosition">
                 <Form.Label>Poste</Form.Label>
-                <Form.Control type="text" placeholder=" Entrer ici ..." value={actualPositionAdd} onChange={e => { form.position = e.target.value; setPositionAdd(e.target.value)}}/>
+                <Form.Control type="text" placeholder=" Entrer ici ..." value={actualPositionAdd} onChange={e => { formAdd.position = e.target.value; setPositionAdd(e.target.value)}}/>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicCompany">
                 <Form.Label>Entreprise</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCompanyAdd} onChange={e => { form.company = e.target.value; setCompanyAdd(e.target.value)}}/>
+                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCompanyAdd} onChange={e => { formAdd.company = e.target.value; setCompanyAdd(e.target.value)}}/>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="fo rmBasicLocation">
                 <Form.Label>Ville</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCityAdd} onChange={e => { form.location = e.target.value; setCityAdd(e.target.value)}}/>
+                <Form.Control type="text" placeholder="Entrer ici ..." value={actualCityAdd} onChange={e => { formAdd.location = e.target.value; setCityAdd(e.target.value)}}/>
               </Form.Group>
             </Form>
 
@@ -287,6 +305,7 @@ function ProfileExperiences() {
                   else {
                     handleChangeF();
                   }
+                  window.location.reload();
                   handleCloseAdd();
                 }}>Ajouter l'expérience</Button>
             </Modal.Footer>
@@ -305,13 +324,11 @@ function ProfileExperiences() {
       <br/>
       <Row>
         <Col md={11}>
-          <a style={{fontWeight: 'bold', fontSize: 23}}>Développeur web</a>
+          <a style={{fontWeight: 'bold', fontSize: 23}}>{Position}</a>
           <br/>
-          <a style={{opacity: 0.7, fontSize: 18}}>Jestimo</a>
+          <a style={{opacity: 0.7, fontSize: 18}}>{Company}</a>
           <br/>
-          <a>Du <a style={{fontWeight: 'bold'}}>01/09/2021</a> jusqu'à <a style={{fontWeight: 'bold'}}>Aujourd'hui</a></a>
-          <br/>
-          <a>Paris</a>
+          <a>{City}</a>
         </Col>
         <Col md={1} style={{alignItems: 'flex-end'}}>
           <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
@@ -325,23 +342,48 @@ function ProfileExperiences() {
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicPosition">
                   <Form.Label>Poste</Form.Label>
-                  <Form.Control type="text" placeholder=" Entrer ici ..." />
+                  <Form.Control type="text" placeholder=" Entrer ici ..." value={actualPosition} onChange={e => { form.position = e.target.value; setPosition(e.target.value)}} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicCompany">
                   <Form.Label>Entreprise</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..." />
+                  <Form.Control type="text" placeholder="Entrer ici ..." value={actualCompany} onChange={e => { form.company = e.target.value; setCompany(e.target.value)}} />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicLocation">
                   <Form.Label>Ville</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..." />
+                  <Form.Control type="text" placeholder="Entrer ici ..." value={actualCity} onChange={e => { form.location = e.target.value; setCity(e.target.value)}} />
                 </Form.Group>
               </Form>
 
               </Modal.Body>
               <Modal.Footer>
-                  <Button variant="danger"  onClick={ () => {
+                  <Button variant="danger" onClick={ () => {
+                    const params = {
+                      position: actualPosition,
+                      company: actualCompany,
+                      city: actualCity,
+                    }
+                    const url : string = "http://localhost:8000/users/me/experiences/" + Id;
+                    axios.delete(url, { withCredentials: true })
+                      .then(res => {
+                        console.log(res);
+                        alert("L'expérience a été supprimée avec succès !");
+                        setCity("");
+                        setPosition("");
+                        setCity("");
+                        window.location.reload();
+                      })
+                      .catch(function (error) {
+                        if (error.response) {
+                          console.log(error.response.data.error.message);
+                          console.log(error.response.status);
+                          console.log(error.response.headers);
+                          alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+                          setCity("");
+                          setPosition("");
+                          setCity("");
+                        }})
                     if (change === false) {
                       handleChangeT();
                     }
@@ -351,6 +393,31 @@ function ProfileExperiences() {
                     handleClose();
                   }}>Supprimer l'expérience</Button>
                   <Button variant="primary" onClick={ () => {
+                    const params = {
+                      position: actualPosition,
+                      company: actualCompany,
+                      city: actualCity,
+                    }
+                    const url : string = "http://localhost:8000/users/me/experiences/" + Id;
+                    axios.patch(url, params, { withCredentials: true })
+                      .then(res => {
+                        console.log(res);
+                        alert("L'expérience " + res.data.position + " a été mise à jour !");
+                        setCity("");
+                        setPosition("");
+                        setCity("");
+                        window.location.reload();
+                      })
+                      .catch(function (error) {
+                        if (error.response) {
+                          console.log(error.response.data.error.message);
+                          console.log(error.response.status);
+                          console.log(error.response.headers);
+                          alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+                          setCity("");
+                          setPosition("");
+                          setCity("");
+                        }})
                     if (change === false) {
                       handleChangeT();
                     }
@@ -395,20 +462,22 @@ function CompetencesList() {
   const handleChangeT = () => setChange(true);
 
   const [name, setCompetence] = useState("");
+  const [id, setId] = useState("");
   let competence : string = "";
-  const [arr, setArr] = useState<any>([]);
+  const [arr, setArr] = useState([] as any);
 
   useEffect(() => {
     axios.get(`http://localhost:8000/users/me/competences`, { withCredentials: true })
     .then(res => {
       console.log(res);
-      // for(let i = 0; i < res.data.length; i++) {
-      //   // var name : string = res.data[i].name;
-      //   // var id : string = res.data[i].id;
-      //   // var domElement : any = <p key={id}>{name}</p>
-      //   // setArr([...domElement]);
-      // }
-      setArr(res.data[0].name);
+      for(let i = 0; i < res.data.length; i++) {
+        //console.log(res.data[i].name);
+        setCompetence(res.data[i].name);
+        setId(res.data[i].id);
+        //var domElement : JSX.Element = <p key={id}>{name}</p>
+        //setArr(res.data[i].name);
+        //console.log(arr);
+      }
     })
     .catch(function (error) {
       if (error.response) {
@@ -417,7 +486,21 @@ function CompetencesList() {
         console.log(error.response.headers);
       }})
   }, [change]);
-  
+
+  // const check = (arr: any[]) => {
+  //   if (arr.length > 1) {
+  //     return (
+  //       arr.map((item, index) => {
+  //         return (
+  //           <p key={index}>{item}</p>
+  //         );
+  //       })
+  //     );
+  //   }
+  //   else {
+  //     return (<h3>No competence yet</h3>);
+  //   }
+  // }
 
   return (
     <>
@@ -428,7 +511,6 @@ function CompetencesList() {
         </Col>
         <Col md={1} style={{alignItems: 'flex-end', marginTop: 10}}>
           <Button variant="danger" onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
-
           <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                   <Modal.Title>Compétences</Modal.Title>
@@ -523,27 +605,38 @@ function CompetencesList() {
       </Row>
       <br/>
       <Divider />
+      {/* Dois gen une row par competence */}
+      {/* {arr.map((item: {} | null | undefined) => <li>{item}</li>)} */}
       <Row>
         <Col md={11}>
           <br/>
-          {arr}
-          {/* <a>Python</a>
-          <br/>
-          <a>JS</a>
-          <br/>
-          <a>TS</a>
-          <br/>
-          <a>Flask</a>
-          <br/>
-          <a>Rust</a>
-          <br/>
-          <a>Bootstrap</a>
-          <br/>
-          <a>Unix</a>
-          <br/> */}
+          <p key={id}>{name}</p>
           <br/>
         </Col>
+        <Col md={1} style={{alignItems: 'flex-end'}}>
+          <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick = {() => {
+            axios.delete(`http://localhost:8000/users/me/competences/` + id, { withCredentials: true })
+              .then(res => {
+                console.log(res);
+                window.location.reload();
+              })
+              .catch(function (error) {
+                if (error.response) {
+                  console.log(error.response.data.error.message);
+                  console.log(error.response.status);
+                  console.log(error.response.headers);
+              }})
+            if (change === false) {
+              handleChangeT();
+            }
+            else {
+              handleChangeF();
+            }
+            
+          }}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+        </Col>
       </Row>
+
     </Container>
     </>
   );
