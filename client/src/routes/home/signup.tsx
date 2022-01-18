@@ -37,11 +37,13 @@ function ShowSignup() {
               <Form.Control type="password" placeholder="********" id="passwdLOG" value={actualPasswd} onChange={e => {input_user.password = e.target.value; setPasswd(e.target.value)}}/>
             </Form.Group>
           } ></OverlayTrigger>
-          <Button variant="primary" onClick={() => {
-            signup(actualEmail, actualPasswd);
-            handleClose();
-            setEmail("");
-            setPasswd("");
+          <Button variant="primary" onClick={ async () => {
+            const result = await signup(actualEmail, actualPasswd);
+            if (result === true) {
+              handleClose();
+              setEmail("");
+              setPasswd("");
+            }
           }}>
             S'inscrire
           </Button>

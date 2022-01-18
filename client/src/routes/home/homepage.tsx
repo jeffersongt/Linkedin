@@ -1,7 +1,7 @@
 import '../../App.css';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Container, Col, Row, OverlayTrigger, Tooltip, InputGroup, Button, FormControl, Nav, Navbar } from 'react-bootstrap';
-import { ShowLogin, ShowSignup } from "../exports";
+import { Container, OverlayTrigger, Tooltip, InputGroup, Button, FormControl, Nav, Navbar } from 'react-bootstrap';
+import { ShowLogin, ShowSignup, SearchHomepage } from "../exports";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 function NavbarHome() {
   const [id, setId] = useState("");
-  let actualId : string = "";
+  var actualId : string = "";
 
   return (
     <Navbar bg="light" expand="lg">
@@ -23,23 +23,7 @@ function NavbarHome() {
                 placement="bottom"
                 overlay={<Tooltip id="button-tooltip-2">Recherchez un utilisateur par son ID</Tooltip>} children={
               <InputGroup className="d-flex">
-                <Button variant="outline-secondary" onClick={() => {
-                  //navigate('/recherche')
-                  const url_user : string = "http://localhost:8000/users/" + id;
-                  axios.get(url_user, { withCredentials: true })
-                    .then(res => {
-                      console.log(res);
-                      alert("L'utilisateur " + res.data.email + " a été trouvé !");
-                    })
-                    .catch(function (error) {
-                      if (error.response) {
-                        console.log(error.response.data.error.message);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                        alert("La recherche pour l'ID " + id + " n'a pas aboutie.");
-                    }})
-                  setId("");
-                }}><FontAwesomeIcon icon={faSearch} style={{color: 'black'}}/></Button>
+                <SearchHomepage id={id}/>
                 <FormControl
                   placeholder="Recherche ..."
                   aria-label="Username"

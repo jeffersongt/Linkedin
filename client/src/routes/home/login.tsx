@@ -1,10 +1,10 @@
 import '../../App.css';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { user } from "../../helper/types";
+import { login } from '../exports';
 
 function ShowLogin() {
   let navigate = useNavigate();
@@ -37,29 +37,14 @@ function ShowLogin() {
               <Form.Label>Mot de passe</Form.Label>
               <Form.Control type="password" placeholder="********" id="passwdLOG" value={actualPasswd} onChange={e => {input_user.password = e.target.value; setPasswd(e.target.value)}}/>
             </Form.Group>
-            <Button variant="primary" onClick={() => {
-              const params = {
-                email: actualEmail,
-                password: actualPasswd
+            <Button variant="primary" onClick={async () => {
+              const result = await login(actualEmail, actualPasswd);
+              if (result !== "") {
+                handleClose();
+                setEmail("");
+                setPasswd("");
+                navigate("/profil");
               }
-              axios.post(`http://localhost:8000/users/signin`, params, { withCredentials: true })
-                .then(res => {
-                  console.log(res);
-                  alert("Connexion réussie ! Bienvenue " + res.data.email);
-                  input_user.userId = res.data.id;
-                  localStorage.setItem('id', res.data.id);
-                  navigate("/profil");
-                })
-                .catch(function (error) {
-                  if (error.response) {
-                    console.log(error.response.data.error.message);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                    alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
-                  }})
-              handleClose();
-              setEmail("");
-              setPasswd("");
               }}>
               Se connecter
             </Button>

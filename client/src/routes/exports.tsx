@@ -2,8 +2,8 @@ import { NavbarHome, Body } from "./home/homepage";
 import { ShowLogin } from "./home/login"
 import { ShowSignup } from "./home/signup"
 import NavbarLogged from "../components/navbar_logged";
-import { signup, signout, deleteAccount } from "../helper/api";
-import { InputSearch } from "./search/search";
+import { signup, signout, deleteAccount, login, searchCompany, searchUser } from "../helper/api";
+import { InputSearch, SearchHomepage } from "./search/search";
 
 export {
     NavbarHome,
@@ -14,5 +14,9 @@ export {
     signup,
     signout,
     deleteAccount,
-    InputSearch
+    login,
+    InputSearch,
+    SearchHomepage,
+    searchCompany,
+    searchUser,
 }

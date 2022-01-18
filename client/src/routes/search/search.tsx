@@ -2,22 +2,15 @@ import '../../App.css';
 import NavbarLogged from '../../components/navbar_logged';
 import { Container, Col, Row, OverlayTrigger, Tooltip, InputGroup, Button, FormControl } from 'react-bootstrap';
 import Divider from "@material-ui/core/Divider";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import { NavbarHome, searchUser, searchCompany } from '../exports';
+import { profileInfos, company } from '../../helper/types';
 
-var name: string;
-var domain: string;
-var adress: string;
-
-var fst_name : string;
-var last_name : string;
-var position : string;
-var city : string;
-var company : string;
+var profile : profileInfos = { first_name : "", last_name : "", position : "", city : "", company : "" }
+var res_company : company = { name : "", domain : "", adress : "" }
 
 function InputSearch() {
   let navigate = useNavigate();
@@ -30,42 +23,26 @@ function InputSearch() {
       placement="bottom"
       overlay={<Tooltip id="button-tooltip-2">Recherchez une entreprise ou un utilisateur par son ID</Tooltip>} children={
     <InputGroup className="d-flex">
-      <Button variant="outline-secondary" onClick={() => {
-        const url_company : string = "http://localhost:8000/users/me/companies/" + id;
-        const url_user : string = "http://localhost:8000/users/" + id + "/profiles";
-        axios.get(url_company, { withCredentials: true })
-          .then(res => {
-            console.log(res);
-            name = res.data.name;
-            domain = res.data.domain;
-            adress = res.data.adresse;
-            alert("L'entreprise " + res.data.name + " a été trouvée !");
+      <Button variant="outline-secondary" onClick={ async () => {
+        const result_u = await searchUser(id);
+        if (result_u.first_name !== ""){
+          profile.first_name = result_u.first_name;
+          profile.last_name = result_u.last_name;
+          profile.position = result_u.position;
+          profile.company = result_u.company;
+          profile.city = result_u.city;
+          navigate("/recherche/utilisateur/logged");
+        }
+        else if (result_u.first_name === "") {
+          const result_c = await searchCompany(id);
+          if (result_c.name !== "") {
+            res_company.name = result_c.name;
+            res_company.domain = result_c.domain;
+            res_company.adress = result_c.adress;
+            alert("oskour");
             navigate("/recherche/entreprise");
-          })
-          .catch(function (error) {
-            if (error.response) {
-              console.log(error.response.data.error.message);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              axios.get(url_user, { withCredentials: true })
-              .then(res => {
-                console.log(res);
-                fst_name = res.data[0].fst_name;
-                last_name = res.data[0].last_name;
-                position = res.data[0].position;
-                company = res.data[0].company;
-                city = res.data[0].city;
-                alert("L'utilisateur a été trouvé !");
-                navigate("/recherche/utilisateur");
-              })
-              .catch(function (error) {
-                if (error.response) {
-                  console.log(error.response.data.error.message);
-                  console.log(error.response.status);
-                  console.log(error.response.headers);
-                  alert("La recherche pour l'ID " + id + " n'a pas aboutie.");
-                }})
-          }})
+          }
+        }
         setId("");
       }}><FontAwesomeIcon icon={faSearch} style={{color: 'black'}}/></Button>
       <FormControl
@@ -119,11 +96,11 @@ function ResultsCompany() {
             <Divider/>
             <br/>
             <Row className="search__result">
-              <a style={{fontWeight: 'bold', fontSize: 23}}>{name}</a>
+              <a style={{fontWeight: 'bold', fontSize: 23}}>{res_company.name}</a>
               <br/>
-              <a style={{opacity: 0.7, fontSize: 20}}>{domain}</a>
+              <a style={{opacity: 0.7, fontSize: 20}}>{res_company.domain}</a>
               <br/>
-              <a>{adress}</a>
+              <a>{res_company.adress}</a>
             </Row>
           </Col>
         </Row>
@@ -132,7 +109,16 @@ function ResultsCompany() {
   );
 }
 
-function SearchUser() {
+function SearchUser(props: { logged: boolean; }) {
+  var navbar : JSX.Element
+
+  if (props.logged === true) {
+    navbar = <NavbarLogged/>;
+  }
+  else {
+    navbar = <NavbarHome/>;
+  }
+
   return (
       <>
        <div style={{
@@ -142,7 +128,7 @@ function SearchUser() {
           width: '100vw',
           height: '100vh'
         }}>
-          <NavbarLogged/>
+          {navbar}
           <BodyUser/>
       </div>
       </>
@@ -172,23 +158,42 @@ return (
           <Divider/>
           <br/>
           <Row className="search__result">
-            <a style={{fontWeight: 'bold', fontSize: 23}}>{fst_name} {last_name}</a>
+            <a style={{fontWeight: 'bold', fontSize: 23}}>{profile.first_name} {profile.last_name}</a>
             <br/>
-            <a style={{opacity: 0.7, fontSize: 20}}>{position}</a>
+            <a style={{opacity: 0.7, fontSize: 20}}>{profile.position}</a>
             <br/>
-            <a>{company}</a>
+            <a>{profile.company}</a>
             <br/>
-            <a style={{fontWeight: 'bold'}}>{city}</a>
+            <a style={{fontWeight: 'bold'}}>{profile.city}</a>
             </Row>
         </Col>
       </Row>
     </Container>
   </>
-);
+  );
+}
+
+function SearchHomepage(props : { id: string }) {
+  let navigate = useNavigate();
+
+  return (
+    <Button variant="outline-secondary" onClick={ async () => {
+      const result = await searchUser(props.id);
+      if (result.first_name !== "") {
+        profile.first_name = result.first_name;
+        profile.last_name = result.last_name;
+        profile.position = result.position;
+        profile.company = result.company;
+        profile.city = result.city;
+        navigate("/recherche/utilisateur/");
+      }
+    }}><FontAwesomeIcon icon={faSearch} style={{color: 'black'}}/></Button>
+  );
 }
 
 export {
   SearchCompany,
   SearchUser,
-  InputSearch
+  InputSearch,
+  SearchHomepage
 }

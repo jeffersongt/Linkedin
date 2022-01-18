@@ -215,12 +215,12 @@ function ProfileExperiences() {
   const [actualCityAdd, setCityAdd] = useState("");
   const [actualPositionAdd, setPositionAdd] = useState("");
   const [actualCompanyAdd, setCompanyAdd] = useState("");
-  let formAdd : profileExperience = {position : "", company : "", start_date: new Date(), end_date: new Date(), location: ""};
+  let formAdd : profileExperience = {position : "", company : "", location: ""};
 
   const [actualCity, setCity] = useState("");
   const [actualPosition, setPosition] = useState("");
   const [actualCompany, setCompany] = useState("");
-  let form : profileExperience = {position : "", company : "", start_date: new Date(), end_date: new Date(), location: ""};
+  let form : profileExperience = {position : "", company : "", location: ""};
 
   const [City, setACity] = useState("");
   const [Position, setAPosition] = useState("");

@@ -12,12 +12,8 @@ import {
 } from "react-router-dom";
 
 const rootElement = document.getElementById("root");
-var isAuth : boolean = false;
-var session_token = localStorage.getItem('token');
-
-if (session_token !== null) {
-  isAuth = true;
-}
+var unlogged : boolean = false;
+var logged : boolean = true;
 
 render(
   <BrowserRouter>
@@ -26,13 +22,11 @@ render(
       <Route path="/profil" element={<User />} />
       <Route path="/entreprises" element={<Companies />} />
       <Route path="/recherche/entreprise" element={<SearchCompany />} />
-      <Route path="/recherche/utilisateur" element={<SearchUser />} />
+      <Route path="/recherche/utilisateur" element={<SearchUser logged={unlogged} />} />
+      <Route path="/recherche/utilisateur/logged" element={<SearchUser logged={logged} />} />
     </Routes>
   </BrowserRouter>,
   rootElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

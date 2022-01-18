@@ -15,8 +15,6 @@ export interface profileInfos {
 export interface profileExperience {
     position: string;
     company: string;
-    start_date: Date;
-    end_date: Date;
     location: string;
 }
 
@@ -28,5 +26,4 @@ export interface company {
     name: string;
     domain: string;
     adress: string;
-    nb_employees: number;
 }
