@@ -1,9 +1,9 @@
 import '../App.css';
-import { Navbar, Container, Nav, Button, InputGroup, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 import { InputSearch } from '../routes/search/search';
 
 function NavbarLogged() {

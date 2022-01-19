@@ -1,11 +1,9 @@
 import '../../App.css';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Container, OverlayTrigger, Tooltip, InputGroup, Button, FormControl, Nav, Navbar } from 'react-bootstrap';
-import { ShowLogin, ShowSignup, SearchHomepage } from "../exports";
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { Container, OverlayTrigger, Tooltip, InputGroup, FormControl, Nav, Navbar } from 'react-bootstrap';
 import { useState } from 'react';
+
+import { ShowLogin, ShowSignup, SearchHomepage } from "../exports";
 
 function NavbarHome() {
   const [id, setId] = useState("");

@@ -6,11 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+
 import { NavbarHome, searchUser, searchCompany } from '../exports';
 import { profileInfos, company } from '../../helper/types';
 
-var profile : profileInfos = { first_name : "", last_name : "", position : "", city : "", company : "" }
-var res_company : company = { name : "", domain : "", adress : "" }
+var profile : profileInfos = { id : "", first_name : "", last_name : "", position : "", city : "", company : "" }
+var res_company : company = { id : "", name : "", domain : "", adress : "" }
 
 function InputSearch() {
   let navigate = useNavigate();
