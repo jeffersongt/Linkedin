@@ -1,6 +1,6 @@
 import '../../App.css';
 import { useEffect, useState } from 'react';
-import { Container, Col, Row, Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
+import { Container, Col, Row, Modal, Button, Form, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 import Divider from "@material-ui/core/Divider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -12,6 +12,7 @@ import { getCompany, postCompany, patchCompany, deleteCompany,
 import { Company, Companies } from '../../helper/types';
 
 var arrCompany : JSX.Element[] = [];
+var arrEmployee : string[] = [];
 
 function CompaniesComponent() {
   return (
@@ -24,16 +25,18 @@ function CompaniesComponent() {
         height: '100vh'
       }}>
         <NavbarLogged/>
-        <Body/>
+        <CompaniesDisplay/>
     </div>
     </>
   );
 }
 
-function Body() {
+function CompaniesDisplay() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [Companies, setCompanies] = useState<Array<JSX.Element>>([]);
 
   var updateId : string[] = [];
   var updateName : string[] = [];
@@ -64,21 +67,13 @@ function Body() {
                   <a>{result.adress[i]}</a>
                 </Col>
                 <Col md={1} style={{alignItems: 'flex-end'}}>
-                  <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={() => {
-                    // axios.get(`http://localhost:8000/users/me/companies/` + id + `/employees`, { withCredentials: true })
-                    // .then(res => {
-                    //   console.log(res);
-                    //   if (res.data) {
-                    //     setEmployeeId(res.data[0].id);
-                    //   }
-                    // })
-                    // .catch(function (error) {
-                    //   if (error.response) {
-                    //     console.log(error.response.data.error.message);
-                    //     console.log(error.response.status);
-                    //     console.log(error.response.headers);
-                    //     alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
-                    //   }})
+                  <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
+                    // const result_Gemployee = await getEmployee(result.id[i]);
+
+                    // if (result_Gemployee.length > 0) {
+                    //   arrEmployee = result_Gemployee;
+                    //   console.log(arrEmployee);
+                    // }
                     handleShow();
                   }}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
 
@@ -110,53 +105,42 @@ function Body() {
                         <a style={{fontSize: 20, fontWeight: 'bold'}}>Employés</a>
                       </Row>
                       <br/>
+
                       {/* <Form>
-                        <InputGroup className="mb-3">
-                          <FormControl
-                            placeholder="Ajouter un employé"
-                            aria-label="Ajouter un employé"
-                            aria-describedby="basic-addon1"
-                          />
-                          <Button variant="secondary" onClick={() => {
-                              const params = {
-                                user: userId, //pas le bon id c est celui du user pas de l employé
-                                company: id,
-                              }
-                              const url : string = "http://localhost:8000/users/me/companies/" + id + "/employees";
-                              axios.post(url, params, { withCredentials: true })
-                                .then(res => {
-                                  console.log(res);
-                                  window.location.reload();
-                                })
-                                .catch(function (error) {
-                                  if (error.response) {
-                                    console.log(error.response.data.error.message);
-                                    console.log(error.response.status);
-                                    console.log(error.response.headers);
-                                    alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
-                                  }})
+                        <Dropdown>
+                          <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            Employés
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            {arrEmployee.map((item) =>
+                                <Dropdown.Item href="#" id={item}>{item}</Dropdown.Item>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                          <Button variant="secondary" onClick={ async () => {
+                              //const result_Aemployee = await postEmployee(params, );
                               handleClose();
                             }}>
                             <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
                           </Button>
-                        </InputGroup>
                       </Form> */}
-
-                      {/* Fetch employees of the companies and gen rows */}
-                      {/* <Row>
-                        <Col sm={8}>
-                        <input
-                        type="text"
-                        value="Joseph Todi"
-                        style={{textAlign: 'center', marginBottom: 5}}
-                        disabled
-                        />
-                        </Col>
-                        <Col sm={4}>
-                        <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
-                        </Col>
-                      </Row> */}
-
+                      
+                      {/* {arrEmployee.map((item) =>
+                          <Row>
+                            <Col sm={8}>
+                            <input
+                            type="text"
+                            value={item}
+                            style={{textAlign: 'center', marginBottom: 5}}
+                            disabled
+                            />
+                            </Col>
+                            <Col sm={4}>
+                            <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+                            </Col>
+                          </Row>
+                      )} */}
                     </Form>
 
                     </Modal.Body>
@@ -191,6 +175,7 @@ function Body() {
         }
       }
       console.log(arrCompany);
+      setCompanies(arrCompany);
     }
     fetchCompany();
   }, []);
@@ -207,7 +192,7 @@ function Body() {
         </Row>
         <br/>
 
-        {arrCompany}
+        {Companies}
         
         <br/>
       </Container>

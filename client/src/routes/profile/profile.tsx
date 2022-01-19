@@ -1,13 +1,13 @@
 import '../../App.css';
 import { Container, Button,
    Image, Col, Row, Modal, Form, InputGroup, FormControl } from 'react-bootstrap';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Divider from "@material-ui/core/Divider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import { Navigate, useNavigate } from 'react-router';
 
 import NavbarLogged from '../../components/navbar_logged';
 import { signout, deleteAccount, getProfile, patchProfile, getExperience,
@@ -29,21 +29,33 @@ function Profile() {
 }
 
 function Body() {
+  let navigate = useNavigate();
+
   return (
     <>
     <PersonalInfosGetUpdate/>
-    <ProfileExperiences/>
+    <ExperiencesGetUpdate/>
     <CompetencesList/>
     
     <Row>
       <Col md={12} className="centered__buttons">
-        <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {await signout()}}>Déconnexion</Button>
+        <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
+          const result = await signout();
+          if (result === 0) {
+            navigate("/");
+          }
+        }}>Déconnexion</Button>
       </Col>
     </Row>
 
     <Row>
       <Col md={12} className="centered__buttons">
-          <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {await deleteAccount()}}>Supprimer le compte</Button>
+          <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
+            const result = await deleteAccount();
+            if (result === 0) {
+              navigate("/");
+            }
+          }}>Supprimer le compte</Button>
       </Col>
     </Row>
     </>
@@ -51,16 +63,18 @@ function Body() {
 }
 
 function PersonalInfosGetUpdate() {
+  let navigate = useNavigate();
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [tempFirstName, setTempFirstName] = useState("");
-  const [tempLastName, setTempLastName] = useState("");
-  const [tempCity, setTempCity] = useState("");
-  const [tempPosition, setTempPosition] = useState("");
-  const [tempCompany, setTempCompany] = useState("");
-  var temporary : Infos = {first_name: "", last_name: "", city: "", position: "", company: "", id: ""};
+  const [updateFirstName, setUpdateFirstName] = useState("");
+  const [updateLastName, setUpdateLastName] = useState("");
+  const [updateCity, setUpdateCity] = useState("");
+  const [updatePosition, setUpdatePosition] = useState("");
+  const [updateCompany, setUpdateCompany] = useState("");
+  var updateInfos : Infos = {first_name: "", last_name: "", city: "", position: "", company: "", id: ""};
 
   useEffect(() => {
     async function fetchProfile() {
@@ -72,11 +86,14 @@ function PersonalInfosGetUpdate() {
         profile.position = result.position;
         profile.company = result.company;
         profile.id = result.id;
-        setTempFirstName(result.first_name);
-        setTempLastName(result.last_name);
-        setTempCity(result.city);
-        setTempPosition(result.position);
-        setTempCompany(result.company);
+        setUpdateFirstName(result.first_name);
+        setUpdateLastName(result.last_name);
+        setUpdateCity(result.city);
+        setUpdatePosition(result.position);
+        setUpdateCompany(result.company);
+      }
+      else if (result.id === "") {
+        navigate("/");
       }
     }
     fetchProfile();
@@ -102,23 +119,23 @@ function PersonalInfosGetUpdate() {
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Prénom</Form.Label>
-                  <Form.Control type="text" placeholder=" Entrer ici ..." value={tempFirstName} onChange={e => { temporary.first_name = e.target.value; setTempFirstName(e.target.value)}} />
+                  <Form.Control type="text" placeholder=" Entrer ici ..." value={updateFirstName} onChange={e => { updateInfos.first_name = e.target.value; setUpdateFirstName(e.target.value)}} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Nom</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..."  value={tempLastName} onChange={e => { temporary.last_name = e.target.value; setTempLastName(e.target.value)}} />
+                  <Form.Control type="text" placeholder="Entrer ici ..."  value={updateLastName} onChange={e => { updateInfos.last_name = e.target.value; setUpdateLastName(e.target.value)}} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPosition">
                   <Form.Label>Poste actuel</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..." value={tempPosition} onChange={e => { temporary.position = e.target.value; setTempPosition(e.target.value)}} />
+                  <Form.Control type="text" placeholder="Entrer ici ..." value={updatePosition} onChange={e => { updateInfos.position = e.target.value; setUpdatePosition(e.target.value)}} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCity">
                   <Form.Label>Entreprise</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..." value={tempCompany} onChange={e => { temporary.company = e.target.value; setTempCompany(e.target.value)}} />
+                  <Form.Control type="text" placeholder="Entrer ici ..." value={updateCompany} onChange={e => { updateInfos.company = e.target.value; setUpdateCompany(e.target.value)}} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCity">
                   <Form.Label>Ville</Form.Label>
-                  <Form.Control type="text" placeholder="Entrer ici ..." value={tempCity} onChange={e => { temporary.city = e.target.value; setTempCity(e.target.value)}} />
+                  <Form.Control type="text" placeholder="Entrer ici ..." value={updateCity} onChange={e => { updateInfos.city = e.target.value; setUpdateCity(e.target.value)}} />
                 </Form.Group>
               </Form>
               </Modal.Body>
@@ -127,11 +144,11 @@ function PersonalInfosGetUpdate() {
                   <Button variant="danger" onClick={handleClose}>Annuler</Button>
                   <Button variant="primary" onClick={ async () => {
                     const params = {
-                      fst_name: tempFirstName,
-                      last_name: tempLastName,
-                      city: tempCity,
-                      position: tempPosition,
-                      company: tempCompany,
+                      fst_name: updateFirstName,
+                      last_name: updateLastName,
+                      city: updateCity,
+                      position: updatePosition,
+                      company: updateCompany,
                     }
                     const result = await patchProfile(params, profile.id);
                     if (result === 0) {
@@ -173,10 +190,12 @@ function InfosDisplay() {
   );
 }
 
-function ProfileExperiences() {
+function ExperiencesGetUpdate() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [Experiences, setExperiences] = useState<Array<JSX.Element>>([]);
 
   var updateId : string[] = [];
   var updateCity : string[] = [];
@@ -214,7 +233,7 @@ function ProfileExperiences() {
                 </a>
               </Col>
               <Col md={1} style={{alignItems: 'flex-end'}}>
-                <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+                <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ () => {handleShow()}}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -268,6 +287,7 @@ function ProfileExperiences() {
           );
         }
         console.log(arrExperience);
+        setExperiences(arrExperience);
       }
     }
     fetchExperience();
@@ -285,8 +305,9 @@ function ProfileExperiences() {
       </Row>
       <br/>
 
-      {arrExperience}
+      {Experiences}
 
+      <br/>
     </Container>
     </>
   );
@@ -352,6 +373,8 @@ function CreateExperience() {
 }
 
 function CompetencesList() {
+  const [Competences, setCompetences] = useState<Array<JSX.Element>>([]);
+
   useEffect(() => {
     async function fetchCompetence() {
       const result = await getCompetence();
@@ -359,11 +382,13 @@ function CompetencesList() {
       if (result.id.length > 0) {
         for(let i = 0; i < result.id.length; i++) {
           arrCompetence.push(
+            
             <div key={result.id[i]}>
-              <Row>
+              <Divider/>
+                <Row>
                 <Col md={11}>
                   <br/>
-                  <a>{result.competence[i]}</a>
+                  <a style={{display: 'flex', alignItems: 'center'}}>{result.competence[i]}</a>
                   <br/>
                 </Col>
                 <Col md={1} style={{alignItems: 'flex-end'}}>
@@ -379,6 +404,7 @@ function CompetencesList() {
           );
         }
         console.log(arrCompetence);
+        setCompetences(arrCompetence);
       }
     }
     fetchCompetence();
@@ -397,9 +423,11 @@ function CompetencesList() {
       </Row>
       <br/>
       <Divider />
+      <br/>
 
-      {arrCompetence}
+      {Competences}
 
+      <br/>
     </Container>
     </>
   );

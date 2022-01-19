@@ -54,7 +54,6 @@ router.post(
           reject(err);
         } else {
           resolve();
-          res.clearCookie('connect.sid', { path: '/' });
         }
       });
     });

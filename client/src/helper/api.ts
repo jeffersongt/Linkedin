@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import { Infos, Company, Companies, Experiences, Competences } from './types';
 
+axios.defaults.withCredentials = true
+
 async function signup(email: string, password: string) {
   const url : string = "http://localhost:8000/users/signup";
   const params = {
@@ -277,7 +279,7 @@ async function postCompetence(params : { name: string }) {
   await axios.post(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
-      alert("La compétence " + res.data.name + " a été ajoutée avec succès !");
+       alert("La compétence " + res.data.name + " a été ajoutée avec succès !");
     })
     .catch(function (error) {
       if (error.response) {
@@ -362,7 +364,7 @@ async function patchCompany(parameters : { name: string, domain: string, adress:
     adress: parameters.adress
   }
 
-  axios.patch(url, params, { withCredentials: true })
+  await axios.patch(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("L'entreprise " + res.data.name + " a été mise à jour !");
@@ -380,7 +382,7 @@ async function patchCompany(parameters : { name: string, domain: string, adress:
 async function deleteCompany(id : string) {
   const url : string = "http://localhost:8000/users/me/companies/" + id;
   
-  axios.delete(url, { withCredentials: true })
+  await axios.delete(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("L'entreprise " + res.data.name + " a été supprimée !");
@@ -395,16 +397,65 @@ async function deleteCompany(id : string) {
   return (0);
 }
 
-async function getEmployee() {
+async function getEmployee(id : string) {
+  const url : string = "http://localhost:8000/users/me/companies/" + id + "/employees";
+  var arrEmployee : string[] = [];
 
+  await axios.get(url, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      for (let i = 0; i < res.data.length; i++) {
+        const element = res.data[i];
+        arrEmployee.push(element);
+      }
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (arrEmployee);
 }
 
-async function postEmployee() {
+async function postEmployee(parameters : { user : string, company : string }, id :string) {
+  const url : string = "http://localhost:8000/users/me/companies/" + id + "/employees";
+  const params = {
+    user: parameters.user, //pas le bon id c est celui du user pas de l employé
+    company: parameters.company,
+  }
 
+  await axios.post(url, params, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (0);
 }
 
-async function deleteEmployee() {
+async function deleteEmployee(companyId : string, employeeId : string) {
+  const url : string = "http://localhost:8000/users/me/companies/" + companyId + "/employees/" + employeeId;
 
+  await axios.delete(url, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      alert("L'employé a été supprimée de l'entreprise avec succès !");
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (0);
 }
 
 export {

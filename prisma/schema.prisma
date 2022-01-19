@@ -28,7 +28,7 @@ model User {
 
 model Profile {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   fst_name  String
   last_name String
@@ -40,7 +40,7 @@ model Profile {
 
 model Competence {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   name      String
   createdAt DateTime @default(now())
@@ -48,7 +48,7 @@ model Competence {
 
 model Experience {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   company   String
   position  String
@@ -58,7 +58,7 @@ model Experience {
 
 model Company {
   id        String     @id @default(cuid())
-  user      User       @relation(fields: [adminId], references: [id])
+  user      User       @relation(fields: [adminId], references: [id], onDelete: Cascade)
   adminId   String
   name      String     @unique
   domain    String
@@ -69,9 +69,9 @@ model Company {
 
 model Employee {
   id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   companyId String
-  company   Company  @relation(fields: [companyId], references: [id])
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
