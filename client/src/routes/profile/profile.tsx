@@ -13,9 +13,9 @@ import NavbarLogged from '../../components/navbar_logged';
 import { signout, deleteAccount, getProfile, patchProfile, getExperience,
   deleteExperience, patchExperience, postExperience,
   getCompetence, postCompetence, deleteCompetence } from '../exports';
-import { profileInfos } from '../../helper/types';
+import { Infos, Experience, Competence } from '../../helper/types';
 
-var profile : profileInfos = {id: "", first_name : "", last_name : "", city: "", position: "", company: ""};
+var profile : Infos = { id: "", first_name : "", last_name : "", city: "", position: "", company: "" };
 var arrExperience : JSX.Element[] = [];
 var arrCompetence : JSX.Element[] = [];
 
@@ -31,7 +31,7 @@ function Profile() {
 function Body() {
   return (
     <>
-    <PersonalInfos/>
+    <PersonalInfosGetUpdate/>
     <ProfileExperiences/>
     <CompetencesList/>
     
@@ -50,7 +50,7 @@ function Body() {
   );
 }
 
-function PersonalInfos() {
+function PersonalInfosGetUpdate() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -60,7 +60,7 @@ function PersonalInfos() {
   const [tempCity, setTempCity] = useState("");
   const [tempPosition, setTempPosition] = useState("");
   const [tempCompany, setTempCompany] = useState("");
-  var temporary : profileInfos = {first_name: "", last_name: "", city: "", position: "", company: "", id: ""};
+  var temporary : Infos = {first_name: "", last_name: "", city: "", position: "", company: "", id: ""};
 
   useEffect(() => {
     async function fetchProfile() {
@@ -91,7 +91,6 @@ function PersonalInfos() {
         </Col>
         <Col md={1} style={{alignItems: 'flex-end', marginTop: 10}}>
 
-          {/* Update profil infos modal */}
           <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
 
           <Modal show={show} onHide={handleClose}>
@@ -142,7 +141,6 @@ function PersonalInfos() {
                   }}>Enregistrer</Button>
               </Modal.Footer>
           </Modal>
-          {/* Update profile infos modal */}
 
         </Col>
       </Row>
@@ -184,7 +182,7 @@ function ProfileExperiences() {
   var updateCity : string[] = [];
   var updatePosition : string[] = [];
   var updateCompany : string[] = [];
-  var updateExperience = {position : "", company : "", city: ""};
+  var updateExperience : Experience = { id: "", position : "", company : "", city: "" };
 
   useEffect(() => {
     async function fetchExperience() {
@@ -302,7 +300,7 @@ function CreateExperience() {
   const [City, setCity] = useState("");
   const [Position, setPosition] = useState("");
   const [Company, setCompany] = useState("");
-  var addExperience = {position : "", company : "", location: ""};
+  var addExperience : Experience = { id: "", position : "", company : "", city: "" };
 
   return (
     <Row>
@@ -327,7 +325,7 @@ function CreateExperience() {
 
               <Form.Group className="mb-3" controlId="fo rmBasicLocation">
                 <Form.Label>Ville</Form.Label>
-                <Form.Control type="text" placeholder="Entrer ici ..." value={City} onChange={e => { addExperience.location = e.target.value; setCity(e.target.value)}}/>
+                <Form.Control type="text" placeholder="Entrer ici ..." value={City} onChange={e => { addExperience.city = e.target.value; setCity(e.target.value)}}/>
               </Form.Group>
             </Form>
 
@@ -413,7 +411,7 @@ function CreateCompetence() {
   const handleShow = () => setShow(true);
 
   const [Competence, setCompetence] = useState("");
-  var addCompetence = { competence: "" };
+  var addCompetence : Competence = { id: "", competence: "" };
 
   return (
     <>

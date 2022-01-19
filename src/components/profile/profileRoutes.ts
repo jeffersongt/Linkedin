@@ -21,26 +21,6 @@ router.get(
   }),
 );
 
-router.post(
-  '/users/:userId/profiles',
-  validate(ProfileCreateDto),
-  ownershipMiddleware, 
-  handler(async (req, res) => {
-    const profile = await controllers.createNewProfile(req.params.userId, req.body);
-    res.status(httpStatus.CREATED).send(profile);
-  }),
-);
-
-router.get(
-  '/users/:userId/profiles/:profileId',
-  authMiddleware,
-  profileMiddleware,
-  handler(async (req, res) => {
-    const profile = await controllers.getProfile(res.locals.profile);
-    res.send(profile);
-  }),
-);
-
 router.patch(
   '/users/:userId/profiles/:profileId',
   validate(ProfileUpdateDto),
@@ -49,16 +29,6 @@ router.patch(
   handler(async (req, res) => {
     const profile = await controllers.updateProfile(res.locals.profile, req.body);
     res.send(profile);
-  }),
-);
-
-router.delete(
-  '/users/:userId/profiles/:profileId',
-  ownershipMiddleware,
-  profileMiddleware,
-  handler(async (req, res) => {
-    await controllers.deleteProfile(res.locals.profile);
-    res.sendStatus(httpStatus.NO_CONTENT);
   }),
 );
 

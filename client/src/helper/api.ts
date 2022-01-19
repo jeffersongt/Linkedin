@@ -1,15 +1,16 @@
 import axios from 'axios';
 
-import { profileInfos, company, profileExperience, profileCompetences } from './types';
+import { Infos, Company, Companies, Experiences, Competences } from './types';
 
 async function signup(email: string, password: string) {
-  var signup : boolean = false;
+  const url : string = "http://localhost:8000/users/signup";
   const params = {
     email: email,
     password: password
   }
+  var signup : boolean = false;
 
-  await axios.post(`http://localhost:8000/users/signup`, params, { withCredentials: true })
+  await axios.post(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("Votre inscription avec l'email " + res.data.email + " a bien été prise en compte ! Veuillez vous connecter");
@@ -26,7 +27,9 @@ async function signup(email: string, password: string) {
 }
 
 async function signout() {
-  await axios.post(`http://localhost:8000/users/signout`, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/signout";
+
+  await axios.post(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("Déconnexion réussie !");
@@ -42,7 +45,9 @@ async function signout() {
 }
 
 async function deleteAccount() {
-  await axios.delete(`http://localhost:8000/users/me`, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/me";
+
+  await axios.delete(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("Votre compte a été supprimé avec succès !");
@@ -58,13 +63,14 @@ async function deleteAccount() {
 }
 
 async function login(email: string, password: string) {
-  var id : string = "";
+  const url : string = "http://localhost:8000/users/signin";
   const params = {
     email: email,
     password: password
   }
+  var id : string = "";
 
-  await axios.post(`http://localhost:8000/users/signin`, params, { withCredentials: true })
+  await axios.post(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("Connexion réussie ! Bienvenue " + res.data.email);
@@ -81,10 +87,10 @@ async function login(email: string, password: string) {
 }
 
 async function searchUser(id : string) {
-  const url_user : string = "http://localhost:8000/users/" + id + "/profiles";
-  var result : profileInfos = { id: "", first_name: "", last_name: "", position: "", city: "", company: "" };
+  const url : string = "http://localhost:8000/users/" + id + "/profiles";
+  var result : Infos = { id: "", first_name: "", last_name: "", position: "", city: "", company: "" };
 
-  await axios.get(url_user, { withCredentials: true })
+  await axios.get(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       result.first_name = res.data[0].fst_name;
@@ -106,7 +112,7 @@ async function searchUser(id : string) {
 
 async function searchCompany(id : string) {
   const url_user : string = "http://localhost:8000/users/me/companies/" + id;
-  var result : company = { id: "", name : "", domain : "", adress : "" };
+  var result : Company = { id: "", name : "", domain : "", adress : "" };
 
   await axios.get(url_user, { withCredentials: true })
     .then(res => {
@@ -126,9 +132,10 @@ async function searchCompany(id : string) {
 }
 
 async function getProfile() {
-  var profile : profileInfos = { id: "", first_name : "", last_name : "", position : "", city: "", company: "" };
+  const url : string = "http://localhost:8000/users/me/profiles";
+  var profile : Infos = { id: "", first_name : "", last_name : "", position : "", city: "", company: "" };
 
-  await axios.get(`http://localhost:8000/users/me/profiles`, { withCredentials: true })
+  await axios.get(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       profile.first_name = res.data[0].fst_name;
@@ -149,7 +156,9 @@ async function getProfile() {
 }
 
 async function patchProfile(params : { fst_name : string, last_name : string, position : string, city: string, company: string }, id : string) {
-  await axios.patch("http://localhost:8000/users/me/profiles/" + id, params, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/me/profiles/" + id;
+
+  await axios.patch(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("Votre profil a été mis à jour avec succès !");
@@ -165,9 +174,10 @@ async function patchProfile(params : { fst_name : string, last_name : string, po
 }
 
 async function getExperience() {
-  var experience : profileExperience = { id: [], position: [], company: [], city: [] }
+  const url : string = "http://localhost:8000/users/me/experiences";
+  var experience : Experiences = { id: [], position: [], company: [], city: [] }
 
-  await axios.get(`http://localhost:8000/users/me/experiences`, { withCredentials: true })
+  await axios.get(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       for(let i = 0; i < res.data.length; i++) {
@@ -187,7 +197,9 @@ async function getExperience() {
 }
 
 async function postExperience(params : { position: string, company: string, city: string }) {
-  await axios.post(`http://localhost:8000/users/me/experiences`, params, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/me/experiences";
+
+  await axios.post(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("L'expérience " + res.data.position + " a été ajoutée avec succès !");
@@ -203,7 +215,9 @@ async function postExperience(params : { position: string, company: string, city
 }
 
 async function patchExperience(params : { position: string, company: string, city: string }, id: string) {
-  await axios.patch("http://localhost:8000/users/me/experiences/" + id, params, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/me/experiences/" + id;
+
+  await axios.patch(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("L'expérience " + res.data.position + " a été mise à jour !");
@@ -218,8 +232,10 @@ async function patchExperience(params : { position: string, company: string, cit
   return (0);
 }
 
-async function deleteExperience(id : string) {
-  await axios.delete("http://localhost:8000/users/me/experiences/" + id, { withCredentials: true })
+async function deleteExperience(id: string) {
+  const url : string = "http://localhost:8000/users/me/experiences/" + id;
+
+  await axios.delete(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("L'expérience a été supprimée avec succès !");
@@ -235,9 +251,10 @@ async function deleteExperience(id : string) {
 }
 
 async function getCompetence() {
-  var competence : profileCompetences = { id: [], competence: [] };
+  const url : string = "http://localhost:8000/users/me/competences";
+  var competence : Competences = { id: [], competence: [] };
 
-  await axios.get(`http://localhost:8000/users/me/competences`, { withCredentials: true })
+  await axios.get(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       for(let i = 0; i < res.data.length; i++) {
@@ -255,7 +272,9 @@ async function getCompetence() {
 }
 
 async function postCompetence(params : { name: string }) {
-  await axios.post("http://localhost:8000/users/me/competences", params, { withCredentials: true })
+  const url : string = "http://localhost:8000/users/me/competences";
+
+  await axios.post(url, params, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("La compétence " + res.data.name + " a été ajoutée avec succès !");
@@ -270,8 +289,10 @@ async function postCompetence(params : { name: string }) {
   return (0);
 }
 
-async function deleteCompetence(id : string) {
-  await axios.delete("http://localhost:8000/users/me/competences/" + id, { withCredentials: true })
+async function deleteCompetence(id: string) {
+  const url : string = "http://localhost:8000/users/me/competences/" + id;
+
+  await axios.delete(url, { withCredentials: true })
     .then(res => {
       console.log(res);
       alert("La compétence a été supprimée avec succès !");
@@ -284,6 +305,106 @@ async function deleteCompetence(id : string) {
         alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
       }})
   return (0);
+}
+
+async function getCompany() {
+  const url : string = "http://localhost:8000/users/me/companies";
+  var company : Companies = { id: [], name: [], domain: [], adress: [] };
+
+  await axios.get(url, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      for(let i = 0; i < res.data.length; i++) {
+        company.id.push(res.data[i].id);
+        company.name.push(res.data[i].name);
+        company.domain.push(res.data[i].domain);
+        company.adress.push(res.data[i].adress);
+      }
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (company);
+}
+
+async function postCompany(parameters : { name: string, domain: string, adress: string }) {
+  const url : string = "http://localhost:8000/users/me/companies";
+  const params = {
+    name: parameters.name,
+    domain: parameters.domain,
+    adress: parameters.adress
+  }
+
+  await axios.post(url, params, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      alert("L'entreprise " + res.data.name + " a bien été créée !");
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (0);
+}
+
+async function patchCompany(parameters : { name: string, domain: string, adress: string }, id : string) {
+  const url : string = "http://localhost:8000/users/me/companies/" + id;
+  const params = {
+    name: parameters.name,
+    domain: parameters.domain,
+    adress: parameters.adress
+  }
+
+  axios.patch(url, params, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      alert("L'entreprise " + res.data.name + " a été mise à jour !");
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (0);
+}
+
+async function deleteCompany(id : string) {
+  const url : string = "http://localhost:8000/users/me/companies/" + id;
+  
+  axios.delete(url, { withCredentials: true })
+    .then(res => {
+      console.log(res);
+      alert("L'entreprise " + res.data.name + " a été supprimée !");
+    })
+    .catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data.error.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
+      }})
+  return (0);
+}
+
+async function getEmployee() {
+
+}
+
+async function postEmployee() {
+
+}
+
+async function deleteEmployee() {
+
 }
 
 export {
@@ -301,5 +422,12 @@ export {
   deleteExperience,
   getCompetence,
   postCompetence,
-  deleteCompetence
+  deleteCompetence,
+  getCompany,
+  postCompany,
+  patchCompany,
+  deleteCompany,
+  getEmployee,
+  postEmployee,
+  deleteEmployee
 }

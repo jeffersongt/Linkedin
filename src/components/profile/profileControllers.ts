@@ -15,30 +15,10 @@ export async function listProfiles(userId: string) {
   return profiles.map((profile) => buildProfileRo(profile));
 }
 
-export async function createNewProfile(userId: string, payload: ProfileCreateDto) {
-  const profile = await db.profile.create({
-    data: {
-      ...payload,
-      user: {
-        connect: { id: userId },
-      },
-    },
-  });
-  return buildProfileRo(profile);
-}
-
-export async function getProfile(profile: Profile) {
-  return buildProfileRo(profile);
-}
-
 export async function updateProfile(profile: Profile, payload: ProfileUpdateDto) {
   const updatedProfile = await db.profile.update({
     where: { id: profile.id },
     data: payload,
   });
   return buildProfileRo(updatedProfile);
-}
-
-export async function deleteProfile(profile: Profile) {
-  await db.profile.delete({ where: { id: profile.id } });
 }

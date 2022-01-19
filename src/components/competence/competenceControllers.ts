@@ -31,14 +31,6 @@ export async function getCompetence(competence: Competence) {
   return buildCompetenceRo(competence);
 }
 
-export async function updateCompetence(competence: Competence, payload: CompetenceUpdateDto) {
-  const updatedCompetence = await db.competence.update({
-    where: { id: competence.id },
-    data: payload,
-  });
-  return buildCompetenceRo(updatedCompetence);
-}
-
 export async function deleteCompetence(competence: Competence) {
   await db.competence.delete({ where: { id: competence.id } });
 }

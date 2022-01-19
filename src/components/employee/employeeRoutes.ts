@@ -31,29 +31,8 @@ router.post(
   }),
 );
 
-router.get(
-  '/users/:userId/employees/:employeeId',
-  authMiddleware,
-  employeeMiddleware,
-  handler(async (req, res) => {
-    const employee = await controllers.getEmployee(res.locals.employee);
-    res.send(employee);
-  }),
-);
-
-router.patch(
-  '/users/:userId/employees/:employeeId',
-  validate(EmployeeUpdateDto),
-  ownershipMiddleware,
-  employeeMiddleware,
-  handler(async (req, res) => {
-    const employee = await controllers.updateEmployee(res.locals.employee, req.body);
-    res.send(employee);
-  }),
-);
-
 router.delete(
-  '/users/:userId/employees/:employeeId',
+  '/users/:userId/companies/:companyId/employees/:employeeId',
   ownershipMiddleware,
   employeeMiddleware,
   handler(async (req, res) => {

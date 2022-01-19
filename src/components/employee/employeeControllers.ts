@@ -30,18 +30,6 @@ export async function createNewEmployee(userId: string, companyId: string, paylo
   return buildEmployeeRo(employee);
 }
 
-export async function getEmployee(employee: Employee) {
-  return buildEmployeeRo(employee);
-}
-
-export async function updateEmployee(employee: Employee, payload: EmployeeUpdateDto) {
-  const updatedEmployee = await db.employee.update({
-    where: { id: employee.id },
-    data: payload,
-  });
-  return buildEmployeeRo(updatedEmployee);
-}
-
 export async function deleteEmployee(employee: Employee) {
   await db.employee.delete({ where: { id: employee.id } });
 }

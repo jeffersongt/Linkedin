@@ -41,17 +41,6 @@ router.get(
   }),
 );
 
-router.patch(
-  '/users/:userId/competences/:competenceId',
-  validate(CompetenceUpdateDto),
-  ownershipMiddleware,
-  competenceMiddleware,
-  handler(async (req, res) => {
-    const competence = await controllers.updateCompetence(res.locals.competence, req.body);
-    res.send(competence);
-  }),
-);
-
 router.delete(
   '/users/:userId/competences/:competenceId',
   ownershipMiddleware,

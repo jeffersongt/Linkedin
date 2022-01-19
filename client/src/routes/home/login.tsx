@@ -4,7 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { user } from "../../helper/types";
+import { User } from "../../helper/types";
 import { login } from '../exports';
 
 function ShowLogin() {
@@ -16,7 +16,7 @@ function ShowLogin() {
 
   const [actualEmail, setEmail] = useState("");
   const [actualPasswd, setPasswd] = useState("");
-  let input_user : user = { email: "", password: "", userId: "" };
+  let input_user : User = { email: "", password: "", userId: "" };
 
   return (
       <>

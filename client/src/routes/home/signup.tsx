@@ -3,7 +3,7 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useState } from 'react';
 
-import { user } from "../../helper/types";
+import { User } from "../../helper/types";
 import { signup } from "../exports";
 
 function ShowSignup() {
@@ -13,7 +13,7 @@ function ShowSignup() {
 
   const [actualEmail, setEmail] = useState("");
   const [actualPasswd, setPasswd] = useState("");
-  let input_user : user = { email: "", password: "", userId: "" };
+  let input_user : User = { email: "", password: "", userId: "" };
 
   return (
       <>
