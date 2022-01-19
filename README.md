@@ -1,6 +1,10 @@
 # Linkedin
 
+This projects consists in re-implementing some features of Linkedin such creating your profile, companies, link employees and much more ...
+
 # Usage
+
+To luanch the project type at the root of the cloned repository :
 
 `docker-compose up --build`
 
