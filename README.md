@@ -7,84 +7,84 @@
 
 | Method | Endpoint | Headers | Body | Query params | Response |
 | --- | --- | --- | --- | --- | --- |
-| POST | /users/signup |  | email
-password |  |  |
-| POST | /users/signin | credentials : include | email
-password |  |  |
+| POST | /users/signup |  | email : string,
+password : string |  |  |
+| POST | /users/signin | credentials : include | email : string,
+password : string |  |  |
 | DELETE | /users/:userId | credentials : include |  | userId |  |
 | POST | /users/signout | credentials : include |  |  |  |
-| GET | /users/:userId/profiles/:profileId | credentials : include |  | userId
-profileId | id : string
-fst_name : string
-last_name : string
-position : string
-company : string
+| GET | /users/:userId/profiles/:profileId | credentials : include |  | userId,
+profileId | id : string,
+fst_name : string,
+last_name : string,
+position : string,
+company : string,
 city : string |
-| PATCH | /users/:userId/profiles/:profileId | credentials : include | id : string
-fst_name : string
-last_name : string
-position : string
-company : string
-city : string | userId
+| PATCH | /users/:userId/profiles/:profileId | credentials : include | id : string,
+fst_name : string,
+last_name : string,
+position : string,
+company : string,
+city : string | userId,
 profileId |  |
-| GET | /users/:userId/experiences | credentials : include |  | userId | companies[{
-  id : string
-  position : string
-  company : string
+| GET | /users/:userId/experiences | credentials : include |  | userId | {
+  id : string,
+  position : string,
+  company : string,
   city : string
-}] |
-| GET | /users/:userId/experiences/:experienceId | credentials : include |  | userId
-experienceId | id : string
-position : string
-company : string
+} |
+| GET | /users/:userId/experiences/:experienceId | credentials : include |  | userId,
+experienceId | id : string,
+position : string,
+company : string,
 city : string |
-| POST | /users/:userId/experiences | credentials : include | id : string
-position : string
-company : string
-city : string | userId
+| POST | /users/:userId/experiences | credentials : include | id : string,
+position : string,
+company : string,
+city : string | userId,
 experienceId |  |
-| PATCH | /users/:userId/experiences/:experienceId | credentials : include | id : string
-position : string
-company : string
-city : string | userId
+| PATCH | /users/:userId/experiences/:experienceId | credentials : include | id : string,
+position : string,
+company : string,
+city : string | userId,
 experienceId |  |
-| DELETE | /users/:userId/experiences/:experienceId | credentials : include |  | userId
+| DELETE | /users/:userId/experiences/:experienceId | credentials : include |  | userId,
 experienceId |  |
-| GET | /users/:userId/competences | credentials : include |  | userId | competences[{
-  id : string
+| GET | /users/:userId/competences | credentials : include |  | userId | {
+  id : string,
   name : string
-}] |
-| GET | /users/:userId/competences/:competenceId | credentials : include |  | userId
-competenceId | id : string
+} |
+| GET | /users/:userId/competences/:competenceId | credentials : include |  | userId,
+competenceId | id : string,
 name : string |
-| POST | /users/:userId/competences | credentials : include | id : string
+| POST | /users/:userId/competences | credentials : include | id : string,
 name : string | userId |  |
-| DELETE | /users/:userId/competences/:competenceId | credentials : include |  | userId
+| DELETE | /users/:userId/competences/:competenceId | credentials : include |  | userId,
 competenceId |  |
-| GET | /users/:userId/companies | credentials : include |  |  | companies[{
-  id : string
-  name : string
-  domain : string
+| GET | /users/:userId/companies | credentials : include |  |  | {
+  id : string,
+  name : string,
+  domain : string,
   adress : string
-}] |
-| GET | /users/:userId/companies/:companyId | credentials : include |  | companyId | id : string
-name : string
-domain : string
+} |
+| GET | /users/:userId/companies/:companyId | credentials : include |  | companyId | id : string,
+name : string,
+domain : string,
 adress : string |
-| POST | /users/:userId/companies/ | credentials : include | id : string
-name : string
-domain : string
+| POST | /users/:userId/companies/ | credentials : include | id : string,
+name : string,
+domain : string,
 adress : string |  |  |
-| PATCH | /users/:userId/companies/:companyId | credentials : include | id : string
-name : string
-domain : string
+| PATCH | /users/:userId/companies/:companyId | credentials : include | id : string,
+name : string,
+domain : string,
 adress : string | companyId |  |
 | DELETE | /users/:userId/companies/:companyId | credentials : include |  | companyId |  |
-| GET | /users/:userId/companies/:companyId/employees | credentials : include |  |  | employees[{
-  id : string
+| GET | /users/:userId/companies/:companyId/employees | credentials : include |  |  | {
+  id : string,
   name : string
-}] |
-| POST  | /users/:userId/companies/:companyId/employees | credentials : include | userId : string
+} |
+| POST  | /users/:userId/companies/:companyId/employees | credentials : include | userId : string,
 companyId : string |  |  |
 | DELETE | /users/:userId/companies/:companyId/employees | credentials : include |  |  |  |
 
