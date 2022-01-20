@@ -3,8 +3,6 @@ import { } from 'class-validator';
 import { Ro } from '../../appRo';
 
 export class EmployeeCreateDto {
-  user!: string;
-
   company!: string;
 }
 

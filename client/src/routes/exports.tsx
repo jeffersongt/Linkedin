@@ -2,7 +2,7 @@ import { NavbarHome, Body } from "./home/homepage";
 import { ShowLogin } from "./home/login"
 import { ShowSignup } from "./home/signup"
 import NavbarLogged from "../components/navbar_logged";
-import { signup, signout, deleteAccount, login, searchCompany, searchUser, getProfile,
+import { signup, signout, deleteAccount, login, searchCompany, searchProfile, getProfile,
     patchProfile, getExperience, deleteExperience, patchExperience, postExperience,
     getCompetence, postCompetence, deleteCompetence, getCompany, postCompany, patchCompany,
     deleteCompany, getEmployee, postEmployee, deleteEmployee } from "../helper/api";
@@ -21,7 +21,7 @@ export {
     InputSearch,
     SearchHomepage,
     searchCompany,
-    searchUser,
+    searchProfile,
     getProfile,
     patchProfile,
     getExperience,
@@ -37,5 +37,5 @@ export {
     deleteCompany,
     getEmployee,
     postEmployee,
-    deleteEmployee
+    deleteEmployee,
 }

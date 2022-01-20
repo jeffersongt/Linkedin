@@ -8,11 +8,12 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
 import NavbarLogged from '../../components/navbar_logged';
 import { getCompany, postCompany, patchCompany, deleteCompany,
-  getEmployee, postEmployee, deleteEmployee } from '../exports';
+  getEmployee, postEmployee, deleteEmployee, searchProfile } from '../exports';
 import { Company, Companies } from '../../helper/types';
+import { useNavigate } from 'react-router';
 
-var arrCompany : JSX.Element[] = [];
-var arrEmployee : string[] = [];
+var arrCompanies : JSX.Element[] = [];
+var arrEmployees : JSX.Element[] = [];
 
 function CompaniesComponent() {
   return (
@@ -25,36 +26,154 @@ function CompaniesComponent() {
         height: '100vh'
       }}>
         <NavbarLogged/>
-        <CompaniesDisplay/>
+        <CompaniesGet/>
     </div>
     </>
   );
 }
 
-function CompaniesDisplay() {
+function CompaniesUpdate(props : { id : string, name : string, domain : string, adress : string}) {
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => { setShow(false); Employees.splice(0, Employees.length); };
   const handleShow = () => setShow(true);
 
-  const [Companies, setCompanies] = useState<Array<JSX.Element>>([]);
+  const [Employees, setEmployees] = useState<Array<JSX.Element>>([]);
+  const [AddEmployee, setAddEmployee] = useState("");
+  var employee : string = "";
 
-  var updateId : string[] = [];
-  var updateName : string[] = [];
-  var updateDomain : string[] = [];
-  var updateAdress : string[] = [];
+  const [updateName, setUpdateName] = useState(props.name);
+  const [updateDomain, setUpdateDomain] = useState(props.domain);
+  const [updateAdress, setUpdateAdress] = useState(props.adress);
   var updateCompany : Company = { id: "", name : "", domain : "", adress: "" };
 
+  return (
+    <>
+    <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
+      const result_GetEmployee = await getEmployee(props.id);
+
+      if (result_GetEmployee.id.length > 0) {
+        for (let i = 0; i < result_GetEmployee.id.length; i++) {
+            arrEmployees.push(<>
+            <Row>
+              <Col sm={8}>
+                <input
+                type="text"
+                value={result_GetEmployee.userName[i]}
+                style={{textAlign: 'center', marginBottom: 5}}
+                disabled
+                />
+              </Col>
+              <Col sm={4}>
+                <Button variant="danger" style={{marginBottom: 5}} onClick={ async () => {
+                  await deleteEmployee(props.id, result_GetEmployee.id[i]);
+                  handleClose();
+                }}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
+              </Col>
+            </Row></>);
+        }
+        setEmployees(arrEmployees);
+        console.log(arrEmployees);
+      }
+      handleShow();
+    }}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+          <Modal.Title>Entreprise X</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+      <Form>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Nom de l'entreprise</Form.Label>
+          <Form.Control type="text" placeholder=" Entrer ici ..." value={updateName} onChange={e => { updateCompany.name = e.target.value; setUpdateName(e.target.value)}} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Domaine</Form.Label>
+          <Form.Control type="text" placeholder="Entrer ici ..." value={updateDomain} onChange={e => { updateCompany.domain = e.target.value; setUpdateDomain(e.target.value)}} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPosition">
+          <Form.Label>Adresse</Form.Label>
+          <Form.Control type="text" placeholder="Entrer ici ..." value={updateAdress} onChange={e => { updateCompany.adress = e.target.value; setUpdateAdress(e.target.value)}} />
+        </Form.Group>
+        <br/>
+        <Divider/>
+        <br/>
+        <Row>
+          <a style={{fontSize: 20, fontWeight: 'bold'}}>Employés</a>
+        </Row>
+        <br/>
+
+        <Form>
+          <InputGroup className="mb-3">
+            <FormControl
+              placeholder="Ajouter un employé par son ID"
+              aria-label="Ajouter un employé par son ID"
+              aria-describedby="basic-addon1"
+              value={AddEmployee} onChange={e => { employee = e.target.value; setAddEmployee(e.target.value)}}
+            />
+          <Button variant="secondary" onClick={ async () => {
+              const params = {
+                company : props.id,
+              }
+              console.log(AddEmployee);
+              await postEmployee(params, AddEmployee);
+              handleClose();
+            }}>
+            <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
+          </Button>
+          </InputGroup>
+        </Form>
+
+        {Employees}
+
+      </Form>
+      </Modal.Body>
+
+      <Modal.Footer>
+          <Button variant="danger" onClick={ async () => {
+            const del_result = await deleteCompany(props.id);
+            
+            if (del_result === 0) {
+              handleClose();
+              window.location.reload();
+            }
+          }}>Supprimer l'entreprise</Button>
+          <Button variant="primary" onClick={ async () => {
+            const params = {
+              name: updateName,
+              domain: updateDomain,
+              adress: updateAdress,
+            }
+            const patch_result = await patchCompany(params, props.id);
+
+            if (patch_result === 0) {
+              handleClose();
+              window.location.reload();
+            }
+          }}>Enregistrer</Button>
+      </Modal.Footer>
+    </Modal>
+    </>
+  );
+}
+
+function CompaniesGet() {
+  let navigate = useNavigate();
+  const [Companies, setCompanies] = useState<Array<JSX.Element>>([]);
+  
   useEffect(() => {
     async function fetchCompany() {
       const result = await getCompany();
       
-      if (result.id.length > 0) {
-        updateId = result.id;
-        updateName = result.name;
-        updateDomain = result.domain;
-        updateAdress = result.adress;
+      if (result.id[0] === "error") {
+        navigate("/");
+      }
+      if (result.id.length > 0 && result.id[0] !== "error") {
         for(let i = 0; i < result.id.length; i++) {
-          arrCompany.push(
+          arrCompanies.push(
             <div key={result.id[i]}>
               <Divider />
               <br/>
@@ -67,115 +186,14 @@ function CompaniesDisplay() {
                   <a>{result.adress[i]}</a>
                 </Col>
                 <Col md={1} style={{alignItems: 'flex-end'}}>
-                  <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
-                    // const result_Gemployee = await getEmployee(result.id[i]);
-
-                    // if (result_Gemployee.length > 0) {
-                    //   arrEmployee = result_Gemployee;
-                    //   console.log(arrEmployee);
-                    // }
-                    handleShow();
-                  }}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
-
-                  <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Entreprise X</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                    <Form>
-                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Nom de l'entreprise</Form.Label>
-                        <Form.Control type="text" placeholder=" Entrer ici ..." value={updateName[i]} onChange={e => { updateCompany.name = e.target.value; updateName[i] = e.target.value}} />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Domaine</Form.Label>
-                        <Form.Control type="text" placeholder="Entrer ici ..." value={updateDomain[i]} onChange={e => { updateCompany.domain = e.target.value; updateDomain[i] = e.target.value}} />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3" controlId="formBasicPosition">
-                        <Form.Label>Adresse</Form.Label>
-                        <Form.Control type="text" placeholder="Entrer ici ..." value={updateAdress[i]} onChange={e => { updateCompany.adress = e.target.value; updateAdress[i] = e.target.value}} />
-                      </Form.Group>
-                      <br/>
-                      <Divider/>
-                      <br/>
-                      <Row>
-                        <a style={{fontSize: 20, fontWeight: 'bold'}}>Employés</a>
-                      </Row>
-                      <br/>
-
-                      {/* <Form>
-                        <Dropdown>
-                          <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Employés
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            {arrEmployee.map((item) =>
-                                <Dropdown.Item href="#" id={item}>{item}</Dropdown.Item>
-                            )}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                          <Button variant="secondary" onClick={ async () => {
-                              //const result_Aemployee = await postEmployee(params, );
-                              handleClose();
-                            }}>
-                            <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
-                          </Button>
-                      </Form> */}
-                      
-                      {/* {arrEmployee.map((item) =>
-                          <Row>
-                            <Col sm={8}>
-                            <input
-                            type="text"
-                            value={item}
-                            style={{textAlign: 'center', marginBottom: 5}}
-                            disabled
-                            />
-                            </Col>
-                            <Col sm={4}>
-                            <Button variant="danger" style={{marginBottom: 5}} onClick={handleClose}><FontAwesomeIcon icon={faWindowClose} style={{color: 'white'}}/></Button>
-                            </Col>
-                          </Row>
-                      )} */}
-                    </Form>
-
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="danger" onClick={ async () => {
-                          const del_result = await deleteCompany(updateId[i]);
-                          
-                          if (del_result === 0) {
-                            handleClose();
-                            window.location.reload();
-                          }
-                        }}>Supprimer l'entreprise</Button>
-                        <Button variant="primary" onClick={ async () => {
-                          const params = {
-                            name: updateName[i],
-                            domain: updateDomain[i],
-                            adress: updateAdress[i],
-                          }
-                          const patch_result = await patchCompany(params, updateId[i]);
-
-                          if (patch_result === 0) {
-                            handleClose();
-                            window.location.reload();
-                          }
-                        }}>Enregistrer</Button>
-                    </Modal.Footer>
-                  </Modal>
+                <CompaniesUpdate id={result.id[i]} name={result.name[i]} domain={result.domain[i]} adress={result.adress[i]} />
                 </Col>
               </Row>
             </div>
           );
         }
       }
-      console.log(arrCompany);
-      setCompanies(arrCompany);
+      setCompanies(arrCompanies);
     }
     fetchCompany();
   }, []);

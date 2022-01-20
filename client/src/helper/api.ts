@@ -88,7 +88,7 @@ async function login(email: string, password: string) {
   return (id);
 }
 
-async function searchUser(id : string) {
+async function searchProfile(id : string) {
   const url : string = "http://localhost:8000/users/" + id + "/profiles";
   var result : Infos = { id: "", first_name: "", last_name: "", position: "", city: "", company: "" };
 
@@ -100,7 +100,6 @@ async function searchUser(id : string) {
       result.position = res.data[0].position;
       result.city = res.data[0].city;
       result.company = res.data[0].company;
-      alert("L'utilisateur " + res.data[0].fst_name + " " + res.data[0].last_name + " a été trouvé !");
     })
     .catch(function (error) {
       if (error.response) {
@@ -328,6 +327,7 @@ async function getCompany() {
         console.log(error.response.data.error.message);
         console.log(error.response.status);
         console.log(error.response.headers);
+        company.id.push("error");
         alert("Une erreur " + error.response.status + " est survenue : " + error.response.data.error.message);
       }})
   return (company);
@@ -385,7 +385,7 @@ async function deleteCompany(id : string) {
   await axios.delete(url, { withCredentials: true })
     .then(res => {
       console.log(res);
-      alert("L'entreprise " + res.data.name + " a été supprimée !");
+      alert("L'entreprise a été supprimée !");
     })
     .catch(function (error) {
       if (error.response) {
@@ -399,15 +399,18 @@ async function deleteCompany(id : string) {
 
 async function getEmployee(id : string) {
   const url : string = "http://localhost:8000/users/me/companies/" + id + "/employees";
-  var arrEmployee : string[] = [];
+  var arrEmployee : { id: string[], userId: string[], userName: string [] } = { id : [], userId : [], userName : [] };
 
   await axios.get(url, { withCredentials: true })
-    .then(res => {
+    .then(async res => {
       console.log(res);
       for (let i = 0; i < res.data.length; i++) {
-        const element = res.data[i];
-        arrEmployee.push(element);
+        arrEmployee.id.push(res.data[i].id)
+        arrEmployee.userId.push(res.data[i].userId);
+        const userName = await searchProfile(res.data[i].userId);
+        arrEmployee.userName.push(userName.first_name + " " + userName.last_name);        
       }
+      
     })
     .catch(function (error) {
       if (error.response) {
@@ -419,10 +422,9 @@ async function getEmployee(id : string) {
   return (arrEmployee);
 }
 
-async function postEmployee(parameters : { user : string, company : string }, id :string) {
+async function postEmployee(parameters : { company : string }, id :string) {
   const url : string = "http://localhost:8000/users/me/companies/" + id + "/employees";
   const params = {
-    user: parameters.user, //pas le bon id c est celui du user pas de l employé
     company: parameters.company,
   }
 
@@ -463,7 +465,7 @@ export {
   signout,
   deleteAccount,
   login,
-  searchUser,
+  searchProfile,
   searchCompany,
   getProfile,
   patchProfile,
@@ -480,5 +482,5 @@ export {
   deleteCompany,
   getEmployee,
   postEmployee,
-  deleteEmployee
+  deleteEmployee,
 }

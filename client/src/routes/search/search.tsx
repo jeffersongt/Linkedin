@@ -7,7 +7,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { NavbarHome, searchUser, searchCompany } from '../exports';
+import { NavbarHome, searchProfile, searchCompany } from '../exports';
 import { Infos, Company } from '../../helper/types';
 
 var profile : Infos = { id : "", first_name : "", last_name : "", position : "", city : "", company : "" }
@@ -29,13 +29,14 @@ function InputSearch() {
           alert("Veuillez rentrer un ID pour lacer une recherche.");
           return;
         }
-        const result_u = await searchUser(id);
+        const result_u = await searchProfile(id);
         if (result_u.first_name !== ""){
           profile.first_name = result_u.first_name;
           profile.last_name = result_u.last_name;
           profile.position = result_u.position;
           profile.company = result_u.company;
           profile.city = result_u.city;
+          alert("L'utilisateur " + result_u.first_name[0] + " " + result_u.last_name[0] + " a été trouvé !");
           navigate("/recherche/utilisateur/logged");
         }
         else if (result_u.first_name === "") {
@@ -114,7 +115,7 @@ function ResultsCompany() {
 }
 
 function SearchUser(props: { logged: boolean; }) {
-  var navbar : JSX.Element
+  var navbar : JSX.Element;
 
   if (props.logged === true) {
     navbar = <NavbarLogged/>;
@@ -186,7 +187,7 @@ function SearchHomepage(props : { id: string }) {
         alert("Veuillez rentrer un ID pour lacer une recherche.");
         return;
       }
-      const result = await searchUser(props.id);
+      const result = await searchProfile(props.id);
       if (result.first_name !== "") {
         profile.first_name = result.first_name;
         profile.last_name = result.last_name;
