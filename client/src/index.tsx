@@ -10,10 +10,16 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const rootElement = document.getElementById("root");
 var unlogged : boolean = false;
 var logged : boolean = true;
+
+// var myCookie = Cookies.get("connect.sid");
+// if (myCookie !== null) {
+//   console.log('zabi lessgo');
+// }
 
 render(
   <BrowserRouter>

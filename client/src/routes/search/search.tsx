@@ -25,6 +25,10 @@ function InputSearch() {
       overlay={<Tooltip id="button-tooltip-2">Recherchez une entreprise ou un utilisateur par son ID</Tooltip>} children={
     <InputGroup className="d-flex">
       <Button variant="outline-secondary" onClick={ async () => {
+        if (id === "") {
+          alert("Veuillez rentrer un ID pour lacer une recherche.");
+          return;
+        }
         const result_u = await searchUser(id);
         if (result_u.first_name !== ""){
           profile.first_name = result_u.first_name;
@@ -40,7 +44,6 @@ function InputSearch() {
             res_company.name = result_c.name;
             res_company.domain = result_c.domain;
             res_company.adress = result_c.adress;
-            alert("oskour");
             navigate("/recherche/entreprise");
           }
         }
@@ -179,6 +182,10 @@ function SearchHomepage(props : { id: string }) {
 
   return (
     <Button variant="outline-secondary" onClick={ async () => {
+      if (props.id === "") {
+        alert("Veuillez rentrer un ID pour lacer une recherche.");
+        return;
+      }
       const result = await searchUser(props.id);
       if (result.first_name !== "") {
         profile.first_name = result.first_name;

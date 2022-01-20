@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import NavbarLogged from '../../components/navbar_logged';
 import { signout, deleteAccount, getProfile, patchProfile, getExperience,
@@ -34,7 +34,7 @@ function Body() {
   return (
     <>
     <PersonalInfosGetUpdate/>
-    <ExperiencesGetUpdate/>
+    <ExperiencesGet/>
     <CompetencesList/>
     
     <Row>
@@ -47,7 +47,6 @@ function Body() {
         }}>Déconnexion</Button>
       </Col>
     </Row>
-
     <Row>
       <Col md={12} className="centered__buttons">
           <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
@@ -190,29 +189,80 @@ function InfosDisplay() {
   );
 }
 
-function ExperiencesGetUpdate() {
+function UpdateExperiences(props : { id : string, position : string, company : string, city : string}) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [Experiences, setExperiences] = useState<Array<JSX.Element>>([]);
-
-  var updateId : string[] = [];
-  var updateCity : string[] = [];
-  var updatePosition : string[] = [];
-  var updateCompany : string[] = [];
+  const [updateCity, setUpdateCity] = useState(props.city);
+  const [updatePosition, setUpdatePosition] = useState(props.position);
+  const [updateCompany, setUpdateCompany] = useState(props.company);
   var updateExperience : Experience = { id: "", position : "", company : "", city: "" };
+
+  return (
+    <>
+    <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ () => {
+      handleShow();
+    }}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
+    
+    <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+            <Modal.Title>Expérience {props.id}</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicPosition">
+            <Form.Label>Poste</Form.Label>
+            <Form.Control type="text" placeholder=" Entrer ici ..." value={updatePosition} onChange={e => { updateExperience.position = e.target.value; setUpdatePosition(e.target.value)}}/>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicCompany">
+            <Form.Label>Entreprise</Form.Label>
+            <Form.Control type="text" placeholder="Entrer ici ..." value={updateCompany} onChange={e => { updateExperience.company = e.target.value; setUpdateCompany(e.target.value)}}/>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="fo rmBasicLocation">
+            <Form.Label>Ville</Form.Label>
+            <Form.Control type="text" placeholder="Entrer ici ..." value={updateCity} onChange={e => { updateExperience.city = e.target.value; setUpdateCity(e.target.value)}}/>
+          </Form.Group>
+        </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+            <Button variant="danger" onClick={ async () => {
+              const del_result = await deleteExperience(props.id);
+              if (del_result === 0) {
+                window.location.reload();
+              }
+              handleClose();
+            }}>Supprimer l'expérience</Button>
+            <Button variant="primary" onClick={ async () => {
+              const params = {
+                position : updatePosition,
+                company : updateCompany,
+                city : updateCity,
+              }
+              const patch_result = await patchExperience(params, props.id);
+              if (patch_result === 0) {
+                window.location.reload();
+              }
+              handleClose();
+            }}>Enregistrer</Button>
+        </Modal.Footer>
+    </Modal>
+    </>
+  );
+}
+ 
+function ExperiencesGet() {
+  const [Experiences, setExperiences] = useState<Array<JSX.Element>>([]);
 
   useEffect(() => {
     async function fetchExperience() {
       const result = await getExperience();
 
       if (result.id.length > 0) {
-        updateId = result.id;
-        updatePosition = result.position;
-        updateCompany = result.company;
-        updateCity = result.city;
-
         for(let i = 0; i < result.id.length; i++) {
           arrExperience.push(
             <div key={result.id[i]}>
@@ -233,60 +283,12 @@ function ExperiencesGetUpdate() {
                 </a>
               </Col>
               <Col md={1} style={{alignItems: 'flex-end'}}>
-                <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ () => {handleShow()}}><FontAwesomeIcon icon={faPen} style={{color: 'white'}}/></Button>
-
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Expérience {result.id[i]}</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                    <Form>
-                      <Form.Group className="mb-3" controlId="formBasicPosition">
-                        <Form.Label>Poste</Form.Label>
-                        <Form.Control type="text" placeholder=" Entrer ici ..." value={updatePosition[i]} onChange={e => { updateExperience.position = e.target.value; updatePosition[i] = e.target.value}}/>
-                      </Form.Group>
-
-                      <Form.Group className="mb-3" controlId="formBasicCompany">
-                        <Form.Label>Entreprise</Form.Label>
-                        <Form.Control type="text" placeholder="Entrer ici ..." value={updateCompany[i]} onChange={e => { updateExperience.company = e.target.value; updateCompany[i] = e.target.value}}/>
-                      </Form.Group>
-
-                      <Form.Group className="mb-3" controlId="fo rmBasicLocation">
-                        <Form.Label>Ville</Form.Label>
-                        <Form.Control type="text" placeholder="Entrer ici ..." value={updateCity[i]} onChange={e => { updateExperience.city = e.target.value; updateCity[i] = e.target.value}}/>
-                      </Form.Group>
-                    </Form>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="danger" onClick={ async () => {
-                          const del_result = await deleteExperience(updateId[i]);
-                          if (del_result === 0) {
-                            window.location.reload();
-                          }
-                          handleClose();
-                        }}>Supprimer l'expérience</Button>
-                        <Button variant="primary" onClick={ async () => {
-                          const params = {
-                            position : updatePosition[i],
-                            company : updateCompany[i],
-                            city : updateCity[i],
-                          }
-                          const patch_result = await patchExperience(params, updateId[i]);
-                          if (patch_result === 0) {
-                            window.location.reload();
-                          }
-                          handleClose();
-                        }}>Enregistrer</Button>
-                    </Modal.Footer>
-                </Modal>
+                <UpdateExperiences id={result.id[i]} position={result.position[i]} company={result.company[i]} city={result.city[i]} />
               </Col>
             </Row>
             </div>
           );
         }
-        console.log(arrExperience);
         setExperiences(arrExperience);
       }
     }
@@ -326,13 +328,15 @@ function CreateExperience() {
   return (
     <Row>
       <Col md={12} className="centered__buttons">
+        
         <Button variant="success" style={{marginTop: 10, marginBottom: 10}} onClick={handleShow}>Ajouter une expérience</Button>
+        
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Ajouter une expérience</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
 
+            <Modal.Body>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicPosition">
                 <Form.Label>Poste</Form.Label>
@@ -349,8 +353,8 @@ function CreateExperience() {
                 <Form.Control type="text" placeholder="Entrer ici ..." value={City} onChange={e => { addExperience.city = e.target.value; setCity(e.target.value)}}/>
               </Form.Group>
             </Form>
-
             </Modal.Body>
+
             <Modal.Footer>
                 <Button variant="danger" onClick={handleClose}>Annuler</Button>
                 <Button variant="primary" onClick={ async () => {
@@ -367,6 +371,7 @@ function CreateExperience() {
                 }}>Ajouter l'expérience</Button>
             </Modal.Footer>
         </Modal>
+
       </Col>
     </Row>
   );
@@ -382,18 +387,18 @@ function CompetencesList() {
       if (result.id.length > 0) {
         for(let i = 0; i < result.id.length; i++) {
           arrCompetence.push(
-            
             <div key={result.id[i]}>
               <Divider/>
                 <Row>
                 <Col md={11}>
                   <br/>
-                  <a style={{display: 'flex', alignItems: 'center'}}>{result.competence[i]}</a>
+                  <a style={{display: 'flex', alignItems: 'center', fontSize: 20}}>{result.competence[i]}</a>
                   <br/>
                 </Col>
                 <Col md={1} style={{alignItems: 'flex-end'}}>
                   <Button variant="danger" style={{marginTop: 10, marginBottom: 10}} onClick={ async () => {
                     const del_result = await deleteCompetence(result.id[i]);
+                    
                     if (del_result === 0) {
                       window.location.reload();
                     }
@@ -403,7 +408,6 @@ function CompetencesList() {
             </div>
           );
         }
-        console.log(arrCompetence);
         setCompetences(arrCompetence);
       }
     }
@@ -462,7 +466,7 @@ function CreateCompetence() {
               const params = {
                 name: Competence
               }
-              const result = await postCompetence(params);
+              await postCompetence(params);
             }}>
             <FontAwesomeIcon icon={faPlus} style={{color: 'white'}}/>
             </Button>
