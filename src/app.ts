@@ -6,7 +6,6 @@ import cors from 'cors';
 import 'reflect-metadata';
 
 import router from './components';
-import { config } from './appConfig';
 import session from './appSession';
 import requestLogger from './middlewares/requestLogger';
 import errorMiddleware from './middlewares/errorMiddleware';

@@ -116,9 +116,9 @@ function CompaniesUpdate(props : { id : string, name : string, domain : string, 
             />
           <Button variant="secondary" onClick={ async () => {
               const params = {
+                user : AddEmployee,
                 company : props.id,
               }
-              console.log(AddEmployee);
               await postEmployee(params, AddEmployee);
               handleClose();
             }}>

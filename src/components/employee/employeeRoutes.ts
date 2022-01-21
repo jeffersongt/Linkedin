@@ -8,7 +8,7 @@ import validate from '../../middlewares/validationMiddleware';
 
 import employeeMiddleware from './employeeMiddleware';
 import * as controllers from './employeeControllers';
-import { EmployeeCreateDto, EmployeeUpdateDto } from './employeeTypes';
+import { EmployeeCreateDto } from './employeeTypes';
 
 const router = express.Router();
 

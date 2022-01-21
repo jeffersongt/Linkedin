@@ -1,6 +1,5 @@
 import express from 'express';
 import handler from 'express-async-handler';
-import httpStatus from 'http-status-codes';
 
 import ownershipMiddleware from '../../middlewares/ownershipMiddleware';
 import authMiddleware from '../../middlewares/authMiddleware';
@@ -8,7 +7,7 @@ import validate from '../../middlewares/validationMiddleware';
 
 import profileMiddleware from './profileMiddleware';
 import * as controllers from './profileControllers';
-import { ProfileCreateDto, ProfileUpdateDto } from './profileTypes';
+import { ProfileUpdateDto } from './profileTypes';
 
 const router = express.Router();
 

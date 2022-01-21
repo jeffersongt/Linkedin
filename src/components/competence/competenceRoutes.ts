@@ -8,7 +8,7 @@ import validate from '../../middlewares/validationMiddleware';
 
 import competenceMiddleware from './competenceMiddleware';
 import * as controllers from './competenceControllers';
-import { CompetenceCreateDto, CompetenceUpdateDto } from './competenceTypes';
+import { CompetenceCreateDto } from './competenceTypes';
 
 const router = express.Router();
 

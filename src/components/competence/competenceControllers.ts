@@ -1,10 +1,8 @@
-import httpStatus from 'http-status-codes';
-import createError from 'http-errors';
 import { Competence } from '@prisma/client';
 
 import db from '../../appDatabase';
 
-import type { CompetenceCreateDto, CompetenceUpdateDto } from './competenceTypes';
+import type { CompetenceCreateDto } from './competenceTypes';
 import { buildCompetenceRo } from './competenceHelpers';
 
 export async function listCompetences(userId: string) {

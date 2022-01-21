@@ -1,5 +1,5 @@
 import {
-  IsEmail, IsOptional, IsString, MinLength, MaxLength,
+  IsOptional, IsString,
 } from 'class-validator';
 
 import { Ro } from '../../appRo';

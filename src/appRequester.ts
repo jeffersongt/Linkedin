@@ -88,46 +88,4 @@ export default class Requester {
       .delete(`/users/${userId}`)
       .expect(statusCodeExpected);
   }
-
-  async createPost(userId: string, payload: any, statusCodeExpected = httpStatus.CREATED) {
-    const { body } = await this.request
-      .post(`/users/${userId}/posts`)
-      .send(payload)
-      .expect(statusCodeExpected);
-
-    return body;
-  }
-
-  async listPosts(userId: string, statusCodeExpected = httpStatus.OK) {
-    const { body } = await this.request
-      .get(`/users/${userId}/posts`)
-      .expect(statusCodeExpected);
-
-    return body;
-  }
-
-  async getPost(userId: string, postId: string, statusCodeExpected = httpStatus.OK) {
-    const { body } = await this.request
-      .get(`/users/${userId}/posts/${postId}`)
-      .expect(statusCodeExpected);
-
-    return body;
-  }
-
-  async updatePost(
-    userId: string, postId: string, payload: any, statusCodeExpected = httpStatus.OK,
-  ) {
-    const { body } = await this.request
-      .patch(`/users/${userId}/posts/${postId}`)
-      .send(payload)
-      .expect(statusCodeExpected);
-
-    return body;
-  }
-
-  async deletePost(userId: string, postId: string, statusCodeExpected = httpStatus.NO_CONTENT) {
-    await this.request
-      .delete(`/users/${userId}/posts/${postId}`)
-      .expect(statusCodeExpected);
-  }
 }

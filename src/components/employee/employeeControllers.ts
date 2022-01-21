@@ -1,10 +1,8 @@
-import httpStatus from 'http-status-codes';
-import createError from 'http-errors';
 import { Employee } from '@prisma/client';
 
 import db from '../../appDatabase';
 
-import type { EmployeeCreateDto, EmployeeUpdateDto } from './employeeTypes';
+import type { EmployeeCreateDto } from './employeeTypes';
 import { buildEmployeeRo } from './employeeHelpers';
 
 export async function listEmployees(userId: string, companyId: string) {

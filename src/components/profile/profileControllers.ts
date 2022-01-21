@@ -1,10 +1,8 @@
-import httpStatus from 'http-status-codes';
-import createError from 'http-errors';
 import { Profile } from '@prisma/client';
 
 import db from '../../appDatabase';
 
-import type { ProfileCreateDto, ProfileUpdateDto } from './profileTypes';
+import type { ProfileUpdateDto } from './profileTypes';
 import { buildProfileRo } from './profileHelpers';
 
 export async function listProfiles(userId: string) {

@@ -1,15 +1,15 @@
 {
-  "name": "api-template",
+  "name": "linkedin",
   "version": "1.0.0",
-  "description": "Modern production-ready typescript backend template",
+  "description": "A linkedin-features based project",
   "keywords": [],
   "author": {
-    "name": "LeChatErrant",
-    "email": "guillaume.hector@epitech.eu",
-    "url": "https://github.com/LeChatErrant/"
+    "name": "jeffersongt",
+    "email": "jefferson.guiot@epitech.eu",
+    "url": "https://github.com/jeffersongt/"
   },
   "repository": {
-    "url": "https://github.com/LeChatErrant/API-template"
+    "url": "https://github.com/jeffersongt/Linkedin"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

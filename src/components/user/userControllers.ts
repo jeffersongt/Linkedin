@@ -18,7 +18,7 @@ export async function signup(payload: UserSignupDto) {
   const user = await db.user.create({
     data: { ...payload, password: hashedPassword },
   });
-  const profile = await db.profile.create({
+  await db.profile.create({
     data: {
       fst_name: '',
       last_name: '',
