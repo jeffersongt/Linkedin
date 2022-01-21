@@ -1,6 +1,6 @@
 import '../../App.css';
 import { useEffect, useState } from 'react';
-import { Container, Col, Row, Modal, Button, Form, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
+import { Container, Col, Row, Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap';
 import Divider from "@material-ui/core/Divider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faPlus } from '@fortawesome/free-solid-svg-icons'
@@ -8,8 +8,8 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
 import NavbarLogged from '../../components/navbar_logged';
 import { getCompany, postCompany, patchCompany, deleteCompany,
-  getEmployee, postEmployee, deleteEmployee, searchProfile } from '../exports';
-import { Company, Companies } from '../../helper/types';
+  getEmployee, postEmployee, deleteEmployee } from '../exports';
+import { Company } from '../../helper/types';
 import { useNavigate } from 'react-router';
 
 var arrCompanies : JSX.Element[] = [];
