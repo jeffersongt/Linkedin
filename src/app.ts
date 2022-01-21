@@ -12,10 +12,7 @@ import errorMiddleware from './middlewares/errorMiddleware';
 import notFoundMiddleware from './middlewares/notFoundMiddleware';
 import meMiddleware from './middlewares/meMiddleware';
 
-/*  Express server  */
 const app = express();
-
-/*  Express session */
 app.use(session);
 
 /*  Middlewares */

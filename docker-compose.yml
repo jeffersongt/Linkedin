@@ -61,7 +61,6 @@ services:
       - backend
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
 networks:
   backend:

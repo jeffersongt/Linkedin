@@ -10,13 +10,10 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-//import Cookies from "js-cookie";
 
 const rootElement = document.getElementById("root");
 var unlogged : boolean = false;
 var logged : boolean = true;
-
-//var myCookie = Cookies.get("connect.sid");
 
 render(
   <BrowserRouter>

@@ -59,8 +59,6 @@ competenceId |  |
  - [Prisma (ORM)](https://www.prisma.io/)
  - [Bcrypt (password hash)](https://www.npmjs.com/package/bcrypt)
  - [Eslint (styling)](https://eslint.org/)
- - [Jest (testing)](https://jestjs.io/)
- - [Supertest (testing)](https://www.npmjs.com/package/supertest)
  - [Husky (pre commit hooks)](https://typicode.github.io/husky/#/)
  - [Github action (CI/CD)](https://github.com/features/actions)
  - [Redis (session management)](https://redis.io/)

@@ -11,7 +11,7 @@ function NavbarLogged() {
     <>
     <Navbar bg="light" expand="lg" style={{position: 'sticky', top: 0}}>
       <Container>
-        <Navbar.Brand href="#home">Linkedin</Navbar.Brand>
+        <Navbar.Brand href="/profil">Linkedin</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
