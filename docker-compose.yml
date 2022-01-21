@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - backend
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
   app:
     build: .
     environment:
@@ -50,17 +61,6 @@ services:
       - /usr/app/node_modules
     ports:
       - "${CLIENT_PORT}:${CLIENT_PORT}"
-
-  db:
-    image: postgres:alpine
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_NAME}
-    networks:
-      - backend
-    volumes:
-      - db-data:/var/lib/postgresql/data
 
 networks:
   backend:
