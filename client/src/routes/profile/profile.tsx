@@ -1,6 +1,6 @@
 import '../../App.css';
 import { Container, Button,
-   Image, Col, Row, Modal, Form, InputGroup, FormControl } from 'react-bootstrap';
+   Image, Col, Row, Modal, Form, InputGroup, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Divider from "@material-ui/core/Divider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -177,6 +177,12 @@ function InfosDisplay() {
         <Image style={{ width: '20%', marginTop: 5}} src="https://cdn.futura-sciences.com/buildsv6/images/mediumoriginal/1/6/4/1642c0dc85_50184905_bored-ape-yatch-club-2344.jpg" roundedCircle />
         <br/>
         <a style={{fontWeight: 'bold', fontSize: 28}}>{profile.first_name} {profile.last_name}</a>
+        <br/>
+        <OverlayTrigger
+        placement="bottom"
+        overlay={<Tooltip id="button-tooltip-2">Ceci est votre id unique personnel, communiquez le à votre employeur pour être ajouté à votre entreprise</Tooltip>} children={
+        <a style={{opacity: 0.8, fontSize: 16}}>{profile.id}</a>
+        }></OverlayTrigger>
         <br/>
         <a style={{opacity: 0.9, fontSize: 20}}>{profile.position}</a>
         <br/>
