@@ -50,3 +50,4 @@ export interface Company {
     domain : string;
     adress : string;
 }
+

@@ -10,7 +10,7 @@ import employees from './employee/employeeRoutes';
 const router = express.Router();
 
 router.get('/ping', (req, res) => res.send('pong'));
-
+ 
 router.use(users);
 router.use(profiles);
 router.use(competences);
