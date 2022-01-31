@@ -38,4 +38,4 @@ Once launched, the API documentation is accessible here :
  - [Github action (CI/CD)](https://github.com/features/actions)
  - [Redis (session management)](https://redis.io/)
  - [Docker](https://www.docker.com/)
- - [Swagger] (https://swagger.io/)
+ - [Swagger](https://swagger.io/)
