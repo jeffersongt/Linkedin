@@ -22,8 +22,8 @@ model User {
   profile    Profile[]
   competence Competence[]
   experience Experience[]
-  employee   Employee[]
   company    Company[]
+  Employee   Employee[]
 }
 
 model Profile {

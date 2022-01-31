@@ -13,6 +13,19 @@ import { UserSignupDto, UserSigninDto, UserUpdateDto } from './userTypes';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *    description: Use to request all users, admin only authorized
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '401':
+ *        description: Unauthorized | If the user is not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not ADMIN
+ */
 router.get(
   '/users',
   adminMiddleware,
@@ -22,6 +35,17 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/signup:
+ *  post:
+ *    description: Use to signup to Linkedin
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If at least one constraint is not respected
+ */
 router.post(
   '/users/signup',
   validate(UserSignupDto),
@@ -31,6 +55,17 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /users/signin:
+ *  post:
+ *    description: Use to signin to Linkedin
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If at least one constraint is not respected
+ */
 router.post(
   '/users/signin',
   validate(UserSigninDto),
@@ -44,6 +79,17 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /users/signout:
+ *  post:
+ *    description: Use to signout from Linkedin
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '401':
+ *        description: Unauthorized | If the user is not logged in
+ */
 router.post(
   '/users/signout',
   authMiddleware,
@@ -61,6 +107,19 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId:
+ *  get:
+ *    description: Use to request a user
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing
+ *      '404':
+ *        description: Not found | If the user doesn't exist
+ */
 router.get(
   '/users/:userId',
   userMiddleware,
@@ -70,6 +129,23 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId:
+ *  patch:
+ *    description: Use to update a user
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing || Bad request | If at least one constraint is not respected
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist 
+ */
 router.patch(
   '/users/:userId',
   validate(UserUpdateDto),
@@ -81,6 +157,23 @@ router.patch(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId:
+ *  delete:
+ *    description: Use to delete a user
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist
+ */
 router.delete(
   '/users/:userId',
   ownershipMiddleware,

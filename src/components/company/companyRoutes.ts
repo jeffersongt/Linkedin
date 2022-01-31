@@ -12,6 +12,17 @@ import { CompanyCreateDto, CompanyUpdateDto } from './companyTypes';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /users/:userId/companies:
+ *  get:
+ *    description: Use to get all companies linked to a profile
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '401':
+ *        description: Unauthorized | If the user is not logged in
+ */
 router.get(
   '/users/:userId/companies',
   authMiddleware,
@@ -21,6 +32,21 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies:
+ *  post:
+ *    description: Use to add a company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing || Bad request | If at least one constraint is not respected
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ */
 router.post(
   '/users/:userId/companies',
   validate(CompanyCreateDto),
@@ -31,6 +57,21 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId:
+ *  get:
+ *    description: Use to get a company linked to a profile
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '404':
+ *        description: Not found | If the experience doesn't exist
+ */
 router.get(
   '/users/:userId/companies/:companyId',
   authMiddleware,
@@ -41,6 +82,23 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId:
+ *  patch:
+ *    description: Use to update an company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing || Bad request | If at least one constraint is not respected
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist 
+ */
 router.patch(
   '/users/:userId/companies/:companyId',
   validate(CompanyUpdateDto),
@@ -52,6 +110,23 @@ router.patch(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId:
+ *  delete:
+ *    description: Use to delete a company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist
+ */
 router.delete(
   '/users/:userId/companies/:companyId',
   ownershipMiddleware,

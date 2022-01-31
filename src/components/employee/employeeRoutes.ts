@@ -12,6 +12,17 @@ import { EmployeeCreateDto } from './employeeTypes';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId/employees:
+ *  get:
+ *    description: Use to get all employees linked to a company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '401':
+ *        description: Unauthorized | If the user is not logged in
+ */
 router.get(
   '/users/:userId/companies/:companyId/employees',
   authMiddleware,
@@ -21,6 +32,21 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId/employees:
+ *  post:
+ *    description: Use to add an employee to a company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing || Bad request | If at least one constraint is not respected
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ */
 router.post(
   '/users/:userId/companies/:companyId/employees',
   validate(EmployeeCreateDto),
@@ -31,6 +57,23 @@ router.post(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/companies/:companyId/employees/:employeeId:
+ *  delete:
+ *    description: Use to delete an employee from a company
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist
+ */
 router.delete(
   '/users/:userId/companies/:companyId/employees/:employeeId',
   ownershipMiddleware,

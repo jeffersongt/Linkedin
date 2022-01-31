@@ -11,6 +11,17 @@ import { ProfileUpdateDto } from './profileTypes';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /users/:userId/profiles:
+ *  get:
+ *    description: Use to request all profiles
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '401':
+ *        description: Unauthorized | If the user is not logged in
+ */
 router.get(
   '/users/:userId/profiles',
   authMiddleware,
@@ -20,6 +31,23 @@ router.get(
   }),
 );
 
+/**
+ * @swagger
+ * /users/:userId/profiles/:profileId:
+ *  patch:
+ *    description: Use to modify a profile
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Bad request | If the route parameters are missing || Bad request | If at least one constraint is not respected
+ *      '401':
+ *        description: Unauthorized | If not logged in
+ *      '403':
+ *        description: Forbidden | If the user making the request is not allowed to
+ *      '404':
+ *        description: Not found | If the user doesn't exist 
+ */
 router.patch(
   '/users/:userId/profiles/:profileId',
   validate(ProfileUpdateDto),
