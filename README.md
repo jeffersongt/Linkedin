@@ -23,7 +23,7 @@ To launch the project type at the root of the cloned repository :
 
 # API
 
-Une fois le projet lancé la documentation de l'API est accessible à l'url :
+Once launched, the API documentation is accessible here :
 
 `http://localhost:8000/api-codes`
 
